@@ -137,3 +137,10 @@ dialog::backdrop{background:rgba(0,0,0,.4)}
 code{background:var(--bg);padding:1px 5px;border-radius:4px;font-size:.88em}
 
 .lesson-tag{display:inline-block;font-size:.85rem;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:3px 12px;margin-bottom:6px;color:var(--muted)}
+
+.lv1{background:#e7f3ea;color:#256b39}.lv2{background:#e6eefb;color:#2b4f99}.lv3{background:#fde8e6;color:#a1271b}
+@media (prefers-color-scheme: dark){.lv1{background:#1f3a27;color:#9fd8ad}.lv2{background:#1e2c46;color:#a9c2f2}.lv3{background:#45201c;color:#f3aaa1}}
+.lv-filter{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.chip{border:1px solid var(--line,#ccc);border-radius:999px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.88rem;background:transparent;color:inherit}
+.chip.on{outline:2px solid currentColor;font-weight:600}
+.chip small{opacity:.7;margin-left:4px}

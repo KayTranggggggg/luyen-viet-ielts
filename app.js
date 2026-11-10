@@ -92,8 +92,15 @@ const arr = x => Array.isArray(x) ? x : (x == null ? [] : [x]);
 const words = s => (String(s).trim().match(/\S+/g) || []).length;
 const exKey = (unitId, bloom, idx, extra) => `${unitId}:${bloom}:${extra ? 'x' : ''}${idx}`;
 
+const LEVELS = { 1: { name: 'Cơ bản', band: 'Band 5–6', cls: 'lv1' }, 2: { name: 'Trung cấp', band: 'Band 6.5–7', cls: 'lv2' }, 3: { name: 'Nâng cao', band: 'Band 8+', cls: 'lv3' } };
+const lvOf = ex => ex.lv || (ex.bloom === 'remember' || ex.bloom === 'understand' ? 1 : 2);
+const KL_MATRIX = `KIEN LUYEN DIFFICULTY MATRIX (use it to judge level and to suggest upgrades):
+Level 1 (Band 5-6): simple/compound sentences with and/but/so/because, repeated subjects; mechanical linkers (Firstly, Moreover...); listing ideas without explanation, personal examples; Task 1 describes each year in separate simple sentences; common words (good, bad, problem).
+Level 2 (Band 6.5-7): relative and adverb clauses (who/which, although/while/if); linkers plus basic pronoun reference (this, they); correct 1-idea / 2-idea paragraphs with explanation and general examples; Task 1 joins two time points with before/after + V-ing or while/whereas; common collocations (play an important role, mitigate the problem).
+Level 3 (Band 8-9): noun clauses as subjects (What lies at the core of...), participle reduction (thereby allowing...), absolute constructions (with + N + V-ing/V3), inversion (Not until... should..., Were we to...), concessive As + adj + as + S + may + V; nominalisation + referencing instead of linkers (This line of reasoning..., The corollary of this..., Added to this is the fact that...); counter-argument (Granted, one might argue that... This is predicated on the assumption that... However, this line of reasoning is not sound because it fails to factor in...); solutions developed as solution -> obstacle -> supporting step; Task 1 Super Boosters merging three stages (started at..., after which..., before ending the period at...; with a subsequent...; followed by...; Similar/Opposite changes can be seen in...) and the 7 No-change comparison structures (far exceeded that of, with respective figures being, compared to only, While... only... did so, in that order); precise academic collocations (a necessary evil, pale in comparison with, compound the problem, bring to the fore).`;
 function exercisesFor(unit, bloom) {
   return (unit.exercises || []).map((e, i) => ({ ex: e, key: exKey(unit.id, e.bloom, i) })).filter(o => o.ex.bloom === bloom)
+    .sort((a, b) => lvOf(a.ex) - lvOf(b.ex))
     .concat((extras[unit.id + ':' + bloom] || []).map((e, i) => ({ ex: e, key: exKey(unit.id, bloom, i, true), extra: true, idx: i })));
 }
 function levelScore(unit, bloom) {
@@ -208,7 +215,7 @@ function renderExercise(o, unit) {
   const ex = o.ex;
   const card = h(`<section class="card ex"><div class="card-head"><div>
       <span class="tag" style="background:${BLOOM_COLOR(ex.bloom)}">${BLOOM.find(b => b.id === ex.bloom)?.en}</span>
-      <span class="tag type-tag">${TYPE_NAME[ex.type] || ex.type}</span>${o.extra ? '<span class="tag type-tag">Gemini tạo</span>' : ''}
+      <span class="tag type-tag">${TYPE_NAME[ex.type] || ex.type}</span><span class="tag ${LEVELS[lvOf(ex)].cls}" title="${LEVELS[lvOf(ex)].name}">${LEVELS[lvOf(ex)].band}</span>${o.extra ? '<span class="tag type-tag">Gemini tạo</span>' : ''}
       <h3 style="margin-top:8px">${fmt(ex.title || '')}</h3></div>
       <div class="row">${progress[o.key] ? `<span class="muted">Tốt nhất: ${progress[o.key].best}%</span>` : ''}${o.extra ? '<button class="btn small ghost del-extra">Xoá</button>' : ''}</div></div>
       ${ex.instr ? `<p class="instr">${fmt(ex.instr)}</p>` : ''}
@@ -363,6 +370,7 @@ RENDER.rewrite = (ex, body, actions, o) => {
       try {
         const r = await gemini(`You are a strict but encouraging IELTS writing teacher. Grade each learner sentence for the task given. Accept any answer that is grammatically correct, natural and fulfils the instruction even if different from the sample. ${langLine()}
 Return JSON: {"results":[{"id":0,"score":0-1 (1=fully correct, 0.5=minor issue, 0=wrong),"feedback":"short explanation","corrected":"best corrected version of the learner's sentence"}]}
+${lvOf(ex) === 3 ? 'This is a Level 3 (Band 8+) item: an answer that is correct but does not use the required structure scores at most 0.5; say which structure was expected.' : ''}
 Exercise: ${ex.title}. Instruction: ${ex.instr || ''}
 ITEMS: ${JSON.stringify(pending.filter(x => x.ans).map(x => ({ id: ex.items.indexOf(x.it), task: x.it.q, sample: arr(x.it.a), learner: x.ans })))}`);
         (r.results || []).forEach(x => results[x.id] = x);
@@ -431,6 +439,8 @@ function writingPrompt(ex, text, unit) {
     const crit1 = ex.kind === 'task1' ? 'Task Achievement' : 'Task Response';
     return `You are a certified IELTS Writing examiner and teacher. Assess this ${ex.kind === 'task1' ? 'Academic Writing Task 1' : 'Writing Task 2'} response using the official public band descriptors (${crit1}, Coherence and Cohesion, Lexical Resource, Grammatical Range and Accuracy). Be accurate and realistic, not generous. Learner is Vietnamese, target band ${s.target}. Lesson focus: ${unit.title}${ex.focus ? ' — ' + arr(ex.focus).join(', ') : ''}.
 ${langLine()}
+${KL_MATRIX}
+In each criterion comment, state which matrix level (1/2/3) the response is at and give one concrete upgrade towards Level 3 using the learner's own content. Make "improved_version" use Level 3 techniques naturally.
 Penalise under-length (${ex.minWords || (ex.kind === 'task1' ? 150 : 250)} words minimum)${ex.kind === 'task1' ? ', missing overview, inaccurate data or opinions' : ', not answering all parts of the question, unclear position'}.
 Return JSON only:
 {"overall": number (band, step 0.5),
@@ -444,6 +454,8 @@ LEARNER ESSAY:
 """${text}"""`;
   }
   return `You are an IELTS grammar & writing teacher. The learner wrote a short paragraph for a grammar practice task. Score it out of 10 focusing on: ${arr(ex.focus).join(', ') || unit.title}, plus overall accuracy and naturalness. Learner is Vietnamese, target band ${s.target}. ${langLine()}
+${KL_MATRIX}
+Mention which matrix level the text is at and how to reach Level 3.
 Return JSON only:
 {"overall": number 0-10,
  "criteria":[{"name":"Đúng trọng tâm ngữ pháp","band":0-10,"comment":"..."},{"name":"Độ chính xác","band":0-10,"comment":"..."},{"name":"Độ đa dạng & tự nhiên","band":0-10,"comment":"..."},{"name":"Hoàn thành yêu cầu","band":0-10,"comment":"..."}],
@@ -482,13 +494,16 @@ async function generateMore(unit, bloom, type, btn) {
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Gemini đang soạn bài...';
   try {
     const kindHint = type === 'write' ? `Use "kind":"${unit.stage === 'grammar' ? 'grammar' : unit.stage}".` : '';
-    const r = await gemini(`You are an experienced IELTS teacher creating ORIGINAL practice material for a Vietnamese learner (target band ${settings().target}).
+    const lv = store.get('kl_lvfilter', 0) || (+settings().target >= 7.5 ? 3 : 2);
+    const r = await gemini(`You are an experienced IELTS teacher creating ORIGINAL practice material for a Vietnamese learner (target band ${settings().target}), following the teaching approach of the Vietnamese IELTS teacher Kien Luyen.
+DIFFICULTY: Level ${lv} (${LEVELS[lv].band}) of the matrix below. ${lv === 3 ? 'Items must require Level 3 structures or reasoning; avoid trivial recall.' : ''}
+${KL_MATRIX}
 Lesson: "${unit.title}" — ${unit.desc}
 Bloom's taxonomy level: ${bloom.toUpperCase()} (${BLOOM.find(b => b.id === bloom).desc}).
 Create ONE new exercise of type "${type}" with ${type === 'write' ? 'one task' : '6 items'}, different from the sample, accurate and unambiguous (only one correct answer for objective items). Instructions and explanations: ${settings().fbLang === 'en' ? 'English' : 'Vietnamese'}; exercise content in English. ${kindHint}
 Return JSON exactly in this schema: ${SCHEMA[type]}
 ${sample ? 'SAMPLE (do not copy): ' + JSON.stringify(sample).slice(0, 2500) : ''}`, { temperature: 0.9 });
-    const ex = Object.assign(r.exercise || r, { bloom, type });
+    const ex = Object.assign(r.exercise || r, { bloom, type, lv });
     if (!validEx(ex)) throw new Error('Gemini trả về bài không đúng định dạng, hãy thử lại.');
     const k = unit.id + ':' + bloom; (extras[k] = extras[k] || []).push(ex); store.set('kl_extras', extras); route();
   } catch (e) { btn.disabled = false; btn.textContent = '✨ Thử lại'; btn.title = e.message; btn.insertAdjacentHTML('afterend', `<div class="notice err-n">${esc(e.message)}</div>`); }
@@ -537,8 +552,13 @@ function viewUnit(main, unitId, bloom) {
     <div class="row" style="justify-content:space-between;margin-top:20px">${prev ? `<a class="btn" href="#/unit/${prev.id}">← ${esc(prev.title)}</a>` : '<span></span>'}${next ? `<a class="btn" href="#/unit/${next.id}">${esc(next.title)} →</a>` : ''}</div>`;
   main.querySelectorAll('.pyr').forEach(b => b.onclick = () => go(`#/unit/${unit.id}/${b.dataset.b}`));
   const list = $('#exList', main);
-  const exs = exercisesFor(unit, bloom);
-  if (!exs.length) list.innerHTML = '<p class="muted">Chưa có bài ở bậc này.</p>';
+  const lvF = store.get('kl_lvfilter', 0);
+  const all = exercisesFor(unit, bloom);
+  const exs = lvF ? all.filter(o => lvOf(o.ex) === lvF) : all;
+  const fr = h(`<div class="lv-filter"><span class="muted">Độ khó:</span>${[[0, 'Tất cả'], [1, 'Cơ bản · Band 5–6'], [2, 'Trung cấp · Band 6.5–7'], [3, 'Nâng cao · Band 8+']].map(([v, t]) => `<button class="chip ${v ? LEVELS[v].cls : ''} ${v === lvF ? 'on' : ''}" data-v="${v}">${t} <small>${v ? all.filter(o => lvOf(o.ex) === v).length : all.length}</small></button>`).join('')}</div>`);
+  fr.querySelectorAll('.chip').forEach(c => c.onclick = () => { store.set('kl_lvfilter', +c.dataset.v); route(); });
+  list.before(fr);
+  if (!exs.length) list.innerHTML = `<p class="muted">${all.length ? 'Không có bài ở độ khó này, bấm ✨ để Gemini soạn thêm.' : 'Chưa có bài ở bậc này.'}</p>`;
   exs.forEach(o => list.appendChild(renderExercise(o, unit)));
   const types = [...new Set((unit.exercises || []).filter(e => e.bloom === bloom).map(e => e.type))];
   const genTypes = types.length ? types : ['mcq'];
