@@ -593,11 +593,18 @@ function initSettings() {
     $('#keyStatus').innerHTML = v ? `🔒 Đã lưu key <b>${esc(v.hint)}</b>, mã hoá bằng mã PIN.` : (ss.get('kl_k') ? '🕒 Key chỉ dùng trong tab này, đóng tab là mất.' : 'Chưa có key.');
     $('#clearKey').hidden = !v && !ss.get('kl_k');
   };
-  const fill = () => { const s = settings(); $('#apiKey').value = ''; $('#pin').value = ''; $('#model').value = s.model; $('#fbLang').value = s.fbLang; $('#target').value = s.target; $('#testResult').textContent = ''; status(); };
+  const DEFAULT_MODELS = [['gemini-2.5-pro', 'Gemini 2.5 Pro (chấm kỹ nhất, chậm hơn)'], ['gemini-2.5-flash', 'Gemini 2.5 Flash (cân bằng, khuyên dùng)'], ['gemini-2.5-flash-lite', 'Gemini 2.5 Flash-Lite (nhanh, tiết kiệm)'], ['gemini-2.0-flash', 'Gemini 2.0 Flash']];
+  const fillModels = cur => {
+    const list = store.get('kl_models', null) || DEFAULT_MODELS;
+    if (cur && !list.some(m => m[0] === cur)) list.unshift([cur, cur]);
+    $('#model').innerHTML = list.map(([id, name]) => `<option value="${esc(id)}">${esc(name)}</option>`).join('');
+    if (cur) $('#model').value = cur;
+  };
+  const fill = () => { const s = settings(); $('#apiKey').value = ''; $('#pin').value = ''; fillModels(s.model); $('#fbLang').value = s.fbLang; $('#target').value = s.target; $('#testResult').textContent = ''; status(); };
   $('#settingsBtn').onclick = () => { fill(); dlg.showModal(); };
   $('#toggleKey').onclick = () => { const i = $('#apiKey'); i.type = i.type === 'password' ? 'text' : 'password'; $('#toggleKey').textContent = i.type === 'password' ? 'Hiện' : 'Ẩn'; };
   const save = async () => {
-    store.set('kl_settings', { model: $('#model').value.trim() || 'gemini-2.5-flash', fbLang: $('#fbLang').value, target: $('#target').value });
+    store.set('kl_settings', { model: $('#model').value || 'gemini-2.5-flash', fbLang: $('#fbLang').value, target: $('#target').value });
     const key = $('#apiKey').value.trim(); if (!key) return true;
     if (!/^[A-Za-z0-9_\-]{20,}$/.test(key)) { $('#testResult').textContent = '❌ Key không đúng định dạng.'; return false; }
     const mode = $('input[name=keyMode]:checked').value;
@@ -622,8 +629,15 @@ function initSettings() {
       const key = await getKey();
       const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=200', { headers: { 'x-goog-api-key': key } }); const d = await res.json();
       if (!res.ok) throw new Error(d?.error?.message || res.status);
-      const ms = (d.models || []).filter(m => (m.supportedGenerationMethods || []).includes('generateContent')).map(m => m.name.replace('models/', '')).filter(n => n.includes('gemini'));
-      $('#modelList').innerHTML = ms.map(m => `<option value="${esc(m)}">`).join(''); $('#testResult').textContent = `Có ${ms.length} model, bấm vào ô Model để chọn.`;
+      const rank = id => (/pro/.test(id) ? 0 : /flash-lite/.test(id) ? 2 : /flash/.test(id) ? 1 : 3) + (/preview|exp/.test(id) ? 0.5 : 0);
+      const ms = (d.models || []).filter(m => (m.supportedGenerationMethods || []).includes('generateContent'))
+        .map(m => [m.name.replace('models/', ''), m.displayName || m.name.replace('models/', '')])
+        .filter(([id]) => /gemini/.test(id) && !/embedding|tts|image|audio|live/.test(id))
+        .sort((a, b) => b[0].localeCompare(a[0], 'en', { numeric: true })).sort((a, b) => rank(a[0]) - rank(b[0]))
+        .map(([id, name]) => [id, name === id ? id : `${name} · ${id}`]);
+      if (!ms.length) throw new Error('Không tìm thấy model nào.');
+      const cur = $('#model').value; store.set('kl_models', ms); fillModels(cur);
+      $('#testResult').textContent = `✅ Đã tải ${ms.length} model. Chọn trong ô Model rồi bấm Lưu.`;
     } catch (e) { $('#testResult').textContent = '❌ ' + e.message; }
   };
   $('#exportData').onclick = () => {
