@@ -12,7 +12,6 @@ const TASK = {
   task2: ['Chỉ viết **Introduction + MỘT đoạn thân bài** (khoảng 120–150 từ) cho đề dưới đây.', 110, ['Introduction có quan điểm rõ', 'Topic sentence → giải thích → ví dụ', 'không viết tắt']],
 };
 for (const u of window.UNITS) {
-  if (u.exercises.some(e => e.bloom === 'create' && lvOf(e) === 1)) continue;
   const src = u.exercises.find(e => e.bloom === 'create' && e.type === 'write' && lvOf(e) === 2) || u.exercises.find(e => e.bloom === 'create' && e.type === 'write');
   if (!src) continue;
   const kind = src.kind || 'grammar';

@@ -508,6 +508,27 @@ ${sample ? 'SAMPLE (do not copy): ' + JSON.stringify(sample).slice(0, 2500) : ''
     const k = unit.id + ':' + bloom; (extras[k] = extras[k] || []).push(ex); store.set('kl_extras', extras); route();
   } catch (e) { btn.disabled = false; btn.textContent = '✨ Thử lại'; btn.title = e.message; btn.insertAdjacentHTML('afterend', `<div class="notice err-n">${esc(e.message)}</div>`); }
 }
+const BLOOM_TYPES = { remember: ['mcq', 'gap', 'match'], understand: ['mcq', 'match', 'gap'], apply: ['gap', 'rewrite', 'order'], analyze: ['match', 'mcq', 'order'], evaluate: ['mcq', 'rewrite'], create: ['write'] };
+async function generateBatch(unit, bloom, lv, btn, n = 5) {
+  const types = BLOOM_TYPES[bloom] || ['mcq'];
+  const samples = (unit.exercises || []).filter(e => e.bloom === bloom && lvOf(e) === lv).slice(0, 2);
+  const label = btn.textContent; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Gemini đang soạn ' + n + ' bài...';
+  try {
+    const want = bloom === 'create' ? Math.min(n, 3) : n;
+    const r = await gemini(`You are an experienced IELTS teacher creating ORIGINAL practice material for a Vietnamese learner, following the teaching approach of the Vietnamese IELTS teacher Kien Luyen.
+DIFFICULTY: Level ${lv} (${LEVELS[lv].band}) of the matrix below. ${lv === 3 ? 'Items must require Level 3 structures or reasoning; avoid trivial recall.' : lv === 1 ? 'Keep items clear and foundational, but still accurate and useful.' : ''}
+${KL_MATRIX}
+Lesson: "${unit.title}" — ${unit.desc}
+Bloom's taxonomy level: ${bloom.toUpperCase()} (${BLOOM.find(b => b.id === bloom).desc}).
+Create ${want} NEW, DIFFERENT exercises for this lesson, Bloom level and difficulty. Use a mix of these types: ${types.join(', ')}. ${bloom === 'create' ? `Each is a writing task with "kind":"${unit.stage === 'grammar' ? 'grammar' : unit.stage}"${unit.stage === 'task1' ? ' and a realistic original chart' : ''}${lv === 1 ? '; make them guided (shorter, with sentence starters in the prompt)' : ''}.` : 'Each objective exercise has 5 items; every item must have exactly one correct answer.'} Vary topics (education, environment, technology, health, work, cities, culture). Instructions and explanations: ${settings().fbLang === 'en' ? 'English' : 'Vietnamese'}; exercise content in English.
+Return JSON: {"exercises":[ ... ]} where each exercise follows the schema for its type:
+${types.map(t => t + ': ' + SCHEMA[t]).join('\n')}
+${samples.length ? 'SAMPLES of the expected level (do not copy): ' + JSON.stringify(samples).slice(0, 3000) : ''}`, { temperature: 0.9 });
+    const list = (r.exercises || (Array.isArray(r) ? r : [r])).map(e => Object.assign(e, { bloom, lv, type: e.type || types[0] })).filter(e => types.includes(e.type) && validEx(e));
+    if (!list.length) throw new Error('Gemini trả về bài không đúng định dạng, hãy thử lại.');
+    const k = unit.id + ':' + bloom; (extras[k] = extras[k] || []).push(...list); store.set('kl_extras', extras); route();
+  } catch (e) { btn.disabled = false; btn.textContent = label; btn.title = e.message; btn.insertAdjacentHTML('afterend', `<div class="notice err-n">${esc(e.message)}</div>`); }
+}
 function validEx(ex) {
   try {
     if (ex.type === 'mcq') return ex.items.length && ex.items.every(i => Array.isArray(i.options) && Number.isInteger(i.a) && i.a < i.options.length);
@@ -548,7 +569,7 @@ function viewUnit(main, unitId, bloom) {
     ${unit.theory ? `<details class="theory" ${unitPct(unit) === 0 ? 'open' : ''}><summary>📘 Kiến thức trọng tâm</summary>${unit.theory.map(t => `<p><b>${esc(t.h)}</b></p><ul>${t.p.map(x => `<li>${fmt(x)}</li>`).join('')}</ul>`).join('')}</details>` : ''}
     <div class="pyramid">${BLOOM.map((b, i) => { const s = levelScore(unit, b.id); return `<button class="pyr ${b.id === bloom ? 'active' : ''}" data-b="${b.id}" style="background:${BLOOM_COLOR(b.id)};width:${100 - i * 11}%"><span>${i + 1}. ${b.en} · ${b.vi}</span><span class="score">${s == null ? '—' : s + '%'}</span></button>`; }).join('')}</div>
     <div id="exList"></div>
-    <div class="card" style="text-align:center"><p class="muted" style="margin-top:0">Muốn luyện thêm ở bậc <b>${BLOOM.find(b => b.id === bloom).en}</b>? Gemini sẽ soạn bài mới cùng chủ điểm.</p><div class="row" style="justify-content:center" id="genRow"></div></div>
+    <div class="card" style="text-align:center"><p class="muted" style="margin-top:0">Muốn luyện thêm ở bậc <b>${BLOOM.find(b => b.id === bloom).en}</b>? Gemini soạn bài mới cùng chủ điểm, đúng độ khó đang chọn, và lưu lại trên máy bạn.</p><div class="row" style="justify-content:center" id="genRow"></div></div>
     <div class="row" style="justify-content:space-between;margin-top:20px">${prev ? `<a class="btn" href="#/unit/${prev.id}">← ${esc(prev.title)}</a>` : '<span></span>'}${next ? `<a class="btn" href="#/unit/${next.id}">${esc(next.title)} →</a>` : ''}</div>`;
   main.querySelectorAll('.pyr').forEach(b => b.onclick = () => go(`#/unit/${unit.id}/${b.dataset.b}`));
   const list = $('#exList', main);
@@ -562,7 +583,9 @@ function viewUnit(main, unitId, bloom) {
   exs.forEach(o => list.appendChild(renderExercise(o, unit)));
   const types = [...new Set((unit.exercises || []).filter(e => e.bloom === bloom).map(e => e.type))];
   const genTypes = types.length ? types : ['mcq'];
-  genTypes.forEach(t => { const b = h(`<button class="btn">✨ Thêm bài ${TYPE_NAME[t]}</button>`); b.onclick = () => generateMore(unit, bloom, t, b); $('#genRow', main).appendChild(b); });
+  const bLv = lvF || (+settings().target >= 7.5 ? 3 : +settings().target >= 6.5 ? 2 : 1);
+  const big = h(`<button class="btn primary">✨ Soạn 5 bài mới · ${LEVELS[bLv].band}</button>`); big.onclick = () => generateBatch(unit, bloom, bLv, big); $('#genRow', main).appendChild(big);
+  genTypes.forEach(t => { const b = h(`<button class="btn">+ 1 bài ${TYPE_NAME[t]}</button>`); b.onclick = () => generateMore(unit, bloom, t, b); $('#genRow', main).appendChild(b); });
 }
 
 function viewHistory(main) {
