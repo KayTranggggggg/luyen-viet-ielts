@@ -50,15 +50,25 @@ function build(kind, lv, pool, seed, unitTitle) {
     }
     return items.length >= 3 ? { type: 'mcq', title: ['', 'Tìm lỗi sai (cơ bản)', 'Tìm lỗi sai', 'Tìm lỗi tinh vi (Mức 3)'][lv], instr: 'Mỗi câu có đúng MỘT lỗi. Chọn phần chứa lỗi.', items } : null;
   }
-  if (kind === 'best' || kind === 'pick') { // evaluate/remember: câu nào hoàn toàn đúng?
-    const nOpt = kind === 'pick' ? (lv === 3 ? 2 : 1) : (lv === 3 ? 3 : 2);
+  if (kind === 'pick') { // remember: câu nào đúng?
+    const nOpt = lv === 3 ? 2 : 1;
     for (const { s, cs } of pick(6)) {
-      if (cs.length < Math.min(nOpt, 2)) continue;
+      if (cs.length < nOpt) continue;
       const wr = cs.slice(0, nOpt); const opts = [s, ...wr.map(w => w.s)]; const k = (hash(s) + seed) % opts.length; const o = opts.slice(k).concat(opts.slice(0, k));
-      items.push({ q: '', options: o, a: (opts.length - k) % opts.length, ex: 'Các câu còn lại sai vì: ' + wr.map(w => w.why).join('; ') + '.' });
+      items.push({ q: '', options: o, a: (opts.length - k) % opts.length, ex: 'Phương án còn lại sai vì: ' + wr.map(w => w.why).join('; ') + '.' });
       if (items.length >= 4) break;
     }
-    return items.length >= 2 ? { type: 'mcq', title: kind === 'pick' ? ['', 'Nhận diện câu đúng (cơ bản)', 'Nhận diện dạng đúng', 'Nhận diện câu chuẩn Band 8 (Mức 3)'][lv] : ['', 'Chọn câu đúng ngữ pháp', 'Câu nào chính xác hoàn toàn?', 'Soát từng chữ: câu nào không lỗi? (Mức 3)'][lv], instr: lv === 3 ? 'Các phương án gần như giống hệt nhau; chỉ MỘT câu không có lỗi.' : 'Chọn câu không có lỗi.', items } : null;
+    return items.length >= 2 ? { type: 'mcq', title: ['', 'Nhận diện câu đúng (cơ bản)', 'Nhận diện dạng đúng', 'Nhận diện câu chính xác (Mức 3)'][lv], instr: 'Chọn câu không có lỗi.', items } : null;
+  }
+  if (kind === 'best') { // evaluate: 2 tầng — chọn câu đúng, rồi chọn lý do câu kia sai
+    for (const { s, cs } of pick(6)) {
+      const c = cs[0]; const others = []; for (const t of cand) for (const x of t.cs) if (fam(x.i) !== fam(c.i) && !others.includes(x.why)) others.push(x.why);
+      if (others.length < 2) continue;
+      const d1 = others[(hash(s) + seed) % others.length], d2 = others[(hash(s) + seed + 1) % others.length]; if (d1 === d2) continue;
+      items.push({ q: '', options: [s, c.s], a: 0, why: { q: 'Câu còn lại sai vì:', options: [c.why, d1, d2], a: 0 } });
+      if (items.length >= 3) break;
+    }
+    return items.length >= 2 ? { type: 'mcq2', title: ['', 'Chọn câu đúng & giải thích', 'Câu nào chính xác – vì sao?', 'Chọn câu chính xác & gọi tên lỗi (Mức 3)'][lv], instr: 'Tầng 1: chọn câu không có lỗi. Tầng 2: chọn lý do câu còn lại sai. Đúng cả hai tầng mới được điểm đủ.', items } : null;
   }
   if (kind === 'why') { // understand: vì sao câu này sai?
     const allWhy = [...new Set(Object.values(LEVEL_RULES).flat().map(i => i))];
@@ -90,8 +100,9 @@ function build(kind, lv, pool, seed, unitTitle) {
 const KIND = { remember: 'pick', understand: 'why', apply: 'fix', analyze: 'spot', evaluate: 'best' };
 let made = 0;
 const stagePool = {};
-for (const u of window.UNITS) (stagePool[u.stage] = stagePool[u.stage] || []).push(...sentencesOf(u));
+for (const u of window.UNITS.filter(u => u.stage === 'grammar')) (stagePool[u.stage] = stagePool[u.stage] || []).push(...sentencesOf(u));
 for (const u of window.UNITS) {
+  if (u.stage !== 'grammar') continue;
   const own = sentencesOf(u);
   for (const bloom of Object.keys(KIND)) for (const lv of [1, 2, 3]) {
     let have = u.exercises.filter(e => e.bloom === bloom && lvOf(e) === lv).length;

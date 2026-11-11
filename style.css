@@ -144,3 +144,18 @@ code{background:var(--bg);padding:1px 5px;border-radius:4px;font-size:.88em}
 .chip{border:1px solid var(--line,#ccc);border-radius:999px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.88rem;background:transparent;color:inherit}
 .chip.on{outline:2px solid currentColor;font-weight:600}
 .chip small{opacity:.7;margin-left:4px}
+/* Trắc nghiệm 2 tầng, mục tiêu bài, nhớ lại, tự soát */
+.tier{margin-top:8px;padding:8px 10px;border-left:3px solid var(--line, #ddd);border-radius:4px}
+.tier-h{font-size:.82rem;font-weight:600;letter-spacing:.02em;opacity:.75;margin-bottom:4px}
+.outcome{margin:10px 0;padding:10px 14px;border-radius:10px;background:var(--ok-bg)}
+details.recall{margin:10px 0;padding:10px 14px;border-radius:10px;border:1px dashed var(--line, #ccc)}
+details.recall summary{cursor:pointer;font-weight:600}
+.preflight{margin:10px 0;padding:10px 14px;border-radius:10px;background:var(--warn-bg);display:grid;gap:4px}
+.preflight label{display:flex;gap:8px;align-items:flex-start;font-size:.92rem;cursor:pointer}
+.pf-h{font-weight:600}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.pill{font-size:.8rem;padding:1px 8px;border-radius:99px;background:var(--ok-bg)}
+.pill.no{background:var(--bad-bg, #fde2e2)}
+details.upg{margin-top:12px}
+details.upg summary{cursor:pointer;font-weight:600}
+.ex.flagged{opacity:.7}

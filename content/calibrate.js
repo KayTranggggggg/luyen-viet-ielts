@@ -56,6 +56,7 @@ const place = (correct, wrongs, seed) => { const opts = [correct, ...wrongs]; co
 let moved = 0, hardened = 0;
 for (const u of window.UNITS) {
   const add = [];
+  if (u.stage !== 'grammar') continue; /* Task 1/2: phương án nhiễu phải là lỗi chiến thuật, không phải lỗi ngữ pháp cài máy */
   for (const e of u.exercises) {
     const lv = lvOf(e);
     if (e.type !== 'mcq' || lv < 2) continue;
