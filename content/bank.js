@@ -67,3 +67,21 @@ window.KL_BANK = function (text, charts = {}) {
   }
   flush();
 };
+
+/* Gắn biểu đồ cho bài khách quan có nhắc tên biểu đồ nội bộ (ví dụ RICE, LINE_COFFEE) và thay tên đó bằng chữ "biểu đồ". */
+window.KL_SNAP = () => Object.fromEntries(window.UNITS.map(u => [u.id, u.exercises.length]));
+window.KL_ATTACH = function (charts, snap) {
+  const names = Object.keys(charts).filter(k => charts[k]).sort((a, b) => b.length - a.length);
+  const re = new RegExp('\\b(' + names.join('|') + ')\\b( chart)?', 'g');
+  const fix = s => typeof s === 'string' ? s.replace(re, 'biểu đồ').replace(/^biểu đồ/, 'Biểu đồ').replace(/biểu đồ:/g, 'Biểu đồ:') : s;
+  for (const u of window.UNITS) for (let i = snap[u.id] || 0; i < u.exercises.length; i++) {
+    const e = u.exercises[i]; if (e.type === 'write') continue;
+    const txt = JSON.stringify(e); const found = names.filter(n => new RegExp('\\b' + n + '\\b').test(txt));
+    if (!found.length) continue;
+    if (!e.chart) e.chart = charts[found[0]];
+    e.extraCharts = found.slice(1).map(n => charts[n]);
+    e.title = fix(e.title); e.instr = fix(e.instr);
+    (e.items || []).forEach(it => { it.q = fix(it.q); if (it.options) it.options = it.options.map(fix); it.ex = fix(it.ex); });
+    (e.pairs || []).forEach(p => { p.l = fix(p.l); p.r = fix(p.r); });
+  }
+};

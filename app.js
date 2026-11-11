@@ -220,7 +220,7 @@ function renderExercise(o, unit) {
       <div class="row">${progress[o.key] ? `<span class="muted">Tốt nhất: ${progress[o.key].best}%</span>` : ''}${o.extra ? '<button class="btn small ghost del-extra">Xoá</button>' : ''}</div></div>
       ${ex.instr ? `<p class="instr">${fmt(ex.instr)}</p>` : ''}
       ${ex.passage ? `<div class="passage">${fmt(ex.passage)}</div>` : ''}
-      ${renderChart(ex.chart)}
+      ${renderChart(ex.chart)}${(ex.extraCharts || []).map(renderChart).join("")}
       <div class="body"></div>
       <div class="actions"></div></section>`);
   const body = $('.body', card), actions = $('.actions', card);
@@ -235,21 +235,47 @@ function addResult(actions, pct, extraHTML = '') {
   let r = $('.result', actions); if (!r) { r = h('<span class="result"></span>'); actions.appendChild(r); }
   r.innerHTML = `${pct}%${extraHTML}`; r.style.color = pct >= 80 ? 'var(--ok)' : pct >= 50 ? 'inherit' : 'var(--bad)';
 }
+const xcache = { get(k) { return store.get('kl_explain', {})[k]; }, set(k, v) { const c = store.get('kl_explain', {}); c[k] = v; const ks = Object.keys(c); if (ks.length > 4000) delete c[ks[0]]; store.set('kl_explain', c); } };
+const unlocked = () => !!(memKey || ss.get('kl_k'));
+function putExplain(el, text, ok) { const f = $('.fbk', el); if (!f) return; f.querySelector('.ai')?.remove(); f.appendChild(h(`<div class="explain ai ${ok ? 'ok' : ''}">🤖 ${fmt(text)}</div>`)); }
+async function explainItems(ex, list) {
+  const todo = [];
+  list.forEach(c => { const v = xcache.get(c.k); if (v) putExplain(c.el, v, c.ok); else todo.push(c); });
+  if (!todo.length) return 0;
+  const r = await gemini(`You are an IELTS writing teacher explaining answers to a Vietnamese learner (target band ${settings().target}). Exercise: "${ex.title}". ${ex.instr ? 'Instructions: ' + ex.instr : ''}
+For EACH item, explain in 2–4 sentences why the correct answer is correct (name the grammar rule / band criterion), and, if the learner was wrong, why their choice is wrong. Be precise and accurate; do not contradict the given correct answer. ${langLine()}
+Return JSON: {"items":[{"i":0,"explanation":"..."}]}
+DATA: ${JSON.stringify(todo.map((c, i) => ({ i, question: c.q, options: c.options, correct: c.correct, learner: c.learner, learner_was_correct: c.ok })))}`);
+  (r.items || []).forEach(x => { const c = todo[+x.i]; if (c && x.explanation) { xcache.set(c.k, x.explanation); putExplain(c.el, x.explanation, c.ok); } });
+  return todo.length;
+}
 function explainBtn(actions, ex, getWrong) {
-  const b = h('<button class="btn ghost">🤖 Nhờ Gemini giải thích câu sai</button>');
-  const out = h('<div></div>');
+  const b = h('<button class="btn ghost">🤖 Gemini giải thích từng câu</button>');
+  const out = h('<div></div>'); actions._explainOut = out;
   b.onclick = async () => {
-    const wrong = getWrong(); if (!wrong.length) { out.innerHTML = '<div class="explain ok">Bạn đúng hết rồi 🎉</div>'; return; }
+    const list = getWrong(); out.innerHTML = '';
+    if (!list.length) { out.innerHTML = '<div class="explain ok">Bạn đúng hết rồi, và câu nào cũng đã có giải thích 🎉</div>'; return; }
     b.disabled = true; b.innerHTML = '<span class="spinner"></span> Đang hỏi...';
     try {
-      const r = await gemini(`You are an IELTS writing teacher. A Vietnamese learner (target band ${settings().target}) answered these questions wrongly in an exercise titled "${ex.title}". For each, explain briefly why the correct answer is right and why the learner's answer is wrong, with one extra example. ${langLine()}
+      if (list[0].el) await explainItems(ex, list);
+      else {
+        const r = await gemini(`You are an IELTS writing teacher. A Vietnamese learner (target band ${settings().target}) answered these questions wrongly in an exercise titled "${ex.title}". For each, explain briefly why the correct answer is right and why the learner's answer is wrong, with one extra example. ${langLine()}
 Return JSON: {"items":[{"q":"...","explanation":"..."}]}
-DATA: ${JSON.stringify(wrong)}`);
-      out.innerHTML = (r.items || []).map(it => `<div class="explain"><b>${fmt(it.q)}</b><br>${fmt(it.explanation)}</div>`).join('');
+DATA: ${JSON.stringify(list)}`);
+        out.innerHTML = (r.items || []).map(it => `<div class="explain"><b>${fmt(it.q)}</b><br>${fmt(it.explanation)}</div>`).join('');
+      }
     } catch (e) { out.innerHTML = `<div class="notice err-n">${esc(e.message)}</div>`; }
-    b.disabled = false; b.textContent = '🤖 Nhờ Gemini giải thích câu sai';
+    b.disabled = false; b.textContent = '🤖 Gemini giải thích từng câu';
   };
   actions.appendChild(b); actions.parentElement.appendChild(out);
+}
+function afterCheck(actions, ex, need) {
+  actions._getWrong = () => need; if (actions._explainOut) actions._explainOut.innerHTML = '';
+  if (!$('.explain-ai', actions)) { explainBtn(actions, ex, () => actions._getWrong()); actions.lastElementChild.classList.add('explain-ai'); }
+  if (!need.length || !need[0].el) return;
+  const cached = need.filter(c => xcache.get(c.k)); cached.forEach(c => putExplain(c.el, xcache.get(c.k), c.ok));
+  if (cached.length < need.length && unlocked()) explainItems(ex, need).catch(e => actions._explainOut && (actions._explainOut.innerHTML = `<div class="notice err-n">${esc(e.message)}</div>`));
+  else if (cached.length < need.length && !hasKey()) need.filter(c => !xcache.get(c.k)).forEach(c => putExplain(c.el, 'Thêm Gemini API key (⚙) để xem giải thích chi tiết cho câu này.', c.ok));
 }
 function resetBtn(actions, cb) { const b = h('<button class="btn ghost">Làm lại</button>'); b.onclick = cb; actions.appendChild(b); }
 
@@ -267,11 +293,12 @@ RENDER.mcq = (ex, body, actions, o) => {
     body.querySelectorAll('.item').forEach(el => {
       const it = ex.items[+el.dataset.i]; const sel = el.querySelector('input:checked'); const v = sel ? +sel.value : -1;
       el.querySelectorAll('.opt').forEach((lab, k) => { lab.classList.toggle('correct', k === it.a); lab.classList.toggle('wrong', k === v && v !== it.a); });
-      if (v === it.a) ok++; else wrong.push({ q: it.q, options: it.options, correct: it.options[it.a], learner: v >= 0 ? it.options[v] : '(bỏ trống)' });
-      $('.fbk', el).innerHTML = it.ex ? `<div class="explain ${v === it.a ? 'ok' : ''}">${fmt(it.ex)}</div>` : '';
+      if (v === it.a) ok++;
+      if (v !== it.a || !it.ex) wrong.push({ el, k: o.key + ':' + el.dataset.i, ok: v === it.a, q: it.q, options: it.options, correct: it.options[it.a], learner: v >= 0 ? it.options[v] : '(bỏ trống)' });
+      $('.fbk', el).innerHTML = `<div class="explain ${v === it.a ? 'ok' : ''}">${v === it.a ? 'Chính xác.' : 'Đáp án đúng: <b>' + fmt(it.options[it.a]) + '</b>'}${it.ex ? '<br>' + fmt(it.ex) : ''}</div>`;
     });
     const pct = Math.round(ok / ex.items.length * 100); addResult(actions, pct, ` · ${ok}/${ex.items.length}`); record(o.key, pct);
-    if (!$('.explain-ai', actions)) { explainBtn(actions, ex, () => wrong); actions.lastElementChild.classList.add('explain-ai'); }
+    afterCheck(actions, ex, wrong);
   };
   actions.appendChild(check); resetBtn(actions, () => route());
 };
@@ -291,11 +318,11 @@ RENDER.gap = (ex, body, actions, o) => {
       const keys = inputs.length === 1 ? [arr(it.a)] : arr(it.a).map(arr);
       let allOk = true;
       inputs.forEach((inp, k) => { total++; const good = (keys[k] || []).some(a => norm(a) === norm(inp.value)); inp.classList.toggle('ok', good); inp.classList.toggle('bad', !good); if (good) ok++; else allOk = false; });
-      if (!allOk) wrong.push({ q: it.q, correct: keys.map(k => k[0]).join(' | '), learner: inputs.map(i => i.value || '(trống)').join(' | ') });
+      if (!allOk || !it.ex) wrong.push({ el, k: o.key + ':' + el.dataset.i, ok: allOk, q: it.q, correct: keys.map(k => k[0]).join(' | '), learner: inputs.map(i => i.value || '(trống)').join(' | ') });
       $('.fbk', el).innerHTML = allOk ? (it.ex ? `<div class="explain ok">${fmt(it.ex)}</div>` : '') : `<div class="explain">Đáp án: <b>${esc(keys.map(k => k.join(' / ')).join(' | '))}</b>${it.ex ? '<br>' + fmt(it.ex) : ''}</div>`;
     });
     const pct = Math.round(ok / total * 100); addResult(actions, pct, ` · ${ok}/${total}`); record(o.key, pct);
-    if (!$('.explain-ai', actions)) { explainBtn(actions, ex, () => wrong); actions.lastElementChild.classList.add('explain-ai'); }
+    afterCheck(actions, ex, wrong);
   };
   actions.appendChild(check); resetBtn(actions, () => route());
 };
@@ -316,7 +343,7 @@ RENDER.match = (ex, body, actions, o) => {
     });
     fb.innerHTML = notes.length ? `<div class="explain">Đáp án đúng: ${notes.join(' · ')}${ex.ex ? '<br>' + fmt(ex.ex) : ''}</div>` : (ex.ex ? `<div class="explain ok">${fmt(ex.ex)}</div>` : '');
     const pct = Math.round(ok / ex.pairs.length * 100); addResult(actions, pct, ` · ${ok}/${ex.pairs.length}`); record(o.key, pct);
-    if (!$('.explain-ai', actions)) { explainBtn(actions, ex, () => wrong); actions.lastElementChild.classList.add('explain-ai'); }
+    afterCheck(actions, ex, wrong);
   };
   actions.appendChild(check); resetBtn(actions, () => route());
 };
@@ -342,11 +369,12 @@ RENDER.order = (ex, body, actions, o) => {
     body.querySelectorAll('.item').forEach(el => {
       const it = ex.items[+el.dataset.i]; const ans = el._answer(); const good = el._correct.some(c => norm(c) === norm(ans));
       $('.built', el).classList.toggle('ok', good); $('.built', el).style.borderColor = good ? 'var(--ok)' : 'var(--bad)';
-      if (good) ok++; else wrong.push({ q: it.words, correct: el._correct[0], learner: ans || '(trống)' });
+      if (good) ok++;
+      if (!good || !it.ex) wrong.push({ el, k: o.key + ':' + el.dataset.i, ok: good, q: it.words, correct: el._correct[0], learner: ans || '(trống)' });
       $('.fbk', el).innerHTML = good ? (it.ex ? `<div class="explain ok">${fmt(it.ex)}</div>` : '') : `<div class="explain">Đáp án: <b>${esc(el._correct[0])}</b>${it.ex ? '<br>' + fmt(it.ex) : ''}</div>`;
     });
     const pct = Math.round(ok / ex.items.length * 100); addResult(actions, pct, ` · ${ok}/${ex.items.length}`); record(o.key, pct);
-    if (!$('.explain-ai', actions)) { explainBtn(actions, ex, () => wrong); actions.lastElementChild.classList.add('explain-ai'); }
+    afterCheck(actions, ex, wrong);
   };
   actions.appendChild(check); resetBtn(actions, () => route());
 };

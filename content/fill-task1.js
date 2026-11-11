@@ -6,6 +6,7 @@ const M = (id, bloom, lv, title, instr, items) => add(id, { bloom, lv, type: 'mc
 const G = (id, bloom, lv, title, instr, items) => add(id, { bloom, lv, type: 'gap', title, instr, items: items.map(([q, a]) => ({ q, a: [].concat(a) })) });
 const R = (id, bloom, lv, title, instr, items) => add(id, { bloom, lv, type: 'rewrite', title, instr, items: items.map(([q, a]) => ({ q, a: [].concat(a) })) });
 const W = (id, lv, title, prompt, chart, focus, minWords = 150) => add(id, { bloom: 'create', lv, type: 'write', kind: 'task1', title, prompt, chart, minWords, focus });
+const SNAP = window.KL_SNAP();
 const P = s => `${s}\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.`;
 
 /* ---------- dữ liệu mới ---------- */
@@ -187,4 +188,5 @@ W('t1m', 3, 'How it works: nhà máy khử mặn (Band 8)', P('The diagram below
 
 /* acid rain dùng thêm cho t1e Mức 2 */
 W('t1e', 2, 'Natural process: mưa axit', P('The diagram below shows how acid rain is formed.'), PROCESS_RAIN, ['chủ động cho quá trình tự nhiên', 'nguyên nhân → hậu quả']);
+window.KL_ATTACH({ LINE_COFFEE, BAR_COMMUTE, MIX_WATER, PIE_WASTE, PROCESS_TEA, PROCESS_RAIN, MAP_CAMPUS, BAR_SPEND6, LINE_EV, PROCESS_DESAL, TABLE_DEGREE: window.UNITS.find(u => u.id === 't1l').exercises.find(e => e.chart && /qualification/.test(e.chart.title || ''))?.chart, BAR_SPORT: window.UNITS.find(u => u.id === 't1l').exercises.find(e => e.chart && /teenagers/.test(e.chart.title || ''))?.chart }, SNAP);
 })();

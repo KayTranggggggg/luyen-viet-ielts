@@ -32,6 +32,7 @@ const C = {
   SOLARPANEL: PR('How a solar panel system powers a home', ['Solar panels on the roof absorb sunlight', 'Cells convert sunlight into direct current (DC) electricity', 'An inverter changes DC into alternating current (AC)', 'AC electricity powers household appliances', 'Surplus electricity is stored in a battery', 'Any remaining surplus is sent to the national grid through a meter']),
   COMMUTE2: T('Average commuting time (minutes) and main mode in four cities, 2024', ['City', 'Avg time', 'Car', 'Public transport', 'Motorbike/Bike'], [['Bangkok', '58', '45%', '35%', '20%'], ['Hanoi', '42', '10%', '12%', '78%'], ['Singapore', '35', '20%', '70%', '10%'], ['Jakarta', '64', '35%', '25%', '40%']]),
 };
+const SNAP = window.KL_SNAP();
 window.KL_BANK(`
 @t1a
 #remember 1 mcq Các dạng đề Task 1 | Chọn dạng đề.
@@ -721,4 +722,5 @@ The diagram below shows how chocolate is produced from cocoa beans.
 
 Summarise the information by selecting and reporting the main features. Write at least 150 words.
 `, C);
+window.KL_ATTACH(C, SNAP);
 })();
