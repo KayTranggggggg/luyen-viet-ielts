@@ -9,13 +9,13 @@ const FAM = [[14, 15, 16], [4, 5, 6], [10, 22, 11, 20], [3, 23, 9], [2, 7], [12,
 const fam = i => FAM.findIndex(f => f.includes(i));
 const LEVEL_RULES = { 1: [14, 15, 16, 19, 20, 5, 21, 17, 23, 8], 2: [1, 2, 3, 6, 7, 9, 10, 11, 12, 24, 4], 3: [0, 18, 22, 13, 4, 1, 2, 7, 12, 24] };
 const hash = s => [...String(s)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
-const viet = s => (String(s).match(/[^\x00-\x7F]/g) || []).length > 0;
+const viet = s => window.KL_isMeta(s) || (String(s).match(/[^\x00-\x7F]/g) || []).length > 0; // câu giải thích (không phải câu mẫu)
 const clean = s => String(s).replace(/\*/g, '').trim();
 function sentencesOf(u) {
   const out = new Set();
   for (const e of u.exercises) {
     if (lvOf(e) < 2 && e.bloom !== 'evaluate') continue;
-    if (e.type === 'mcq') e.items.forEach(it => { const c = it.options[it.a]; if (!/Các phương án sai/.test(it.ex || '') || true) out.add(clean(c)); });
+    if (e.type === 'mcq') e.items.forEach(it => { const c = it.options[it.a]; if (!/Why the other options are wrong/.test(it.ex || '') || true) out.add(clean(c)); });
     if (e.type === 'rewrite') e.items.forEach(it => [].concat(it.a).forEach(a => out.add(clean(a))));
   }
   return [...out].filter(s => !viet(s) && W(s) >= 7 && W(s) <= 45 && /[.?!]$/.test(s) && /^[A-Z]/.test(s) && !/\.\.\.|…| \/ |\?$/.test(s));
@@ -28,7 +28,7 @@ function diff(a, b) {
   return { i, good: x.slice(i, x.length - j), bad: y.slice(i, y.length - j), x, y, j };
 }
 const strip = w => w.replace(/^[^\w']+|[^\w']+$/g, '');
-const GAP_HINT = { 0: '(đại từ quan hệ)', 18: '(giới từ)', 22: '(mạo từ)', 24: '(1 từ)', 11: '(mạo từ)', 17: '(1 từ)', 8: '(1 từ)' };
+const GAP_HINT = { 0: '(relative pronoun)', 18: '(preposition)', 22: '(article)', 24: '(1 word)', 11: '(article)', 17: '(1 word)', 8: '(1 word)' };
 function build(kind, lv, pool, seed, unitTitle) {
   const rules = kind === 'best' || kind === 'pick' ? [...new Set([...LEVEL_RULES[lv], ...LEVEL_RULES[lv === 1 ? 2 : lv - 1]])] : LEVEL_RULES[lv];
   const cand = [];
@@ -45,30 +45,30 @@ function build(kind, lv, pool, seed, unitTitle) {
       if (others.length < 2) continue;
       const opts = [right, ...others].map(o => o.replace(/[,.;:]$/, ''));
       const k = (seed + items.length) % 3; const o = opts.slice(k).concat(opts.slice(0, k));
-      items.push({ q: '*' + c.s + '*', options: o, a: (3 - k) % 3, ex: `Lỗi: ${c.why}. Câu đúng: *${s}*` });
+      items.push({ q: '*' + c.s + '*', options: o, a: (3 - k) % 3, ex: `The error: ${c.why}. Correct sentence: *${s}*` });
       if (items.length >= 4) break;
     }
-    return items.length >= 3 ? { type: 'mcq', title: ['', 'Tìm lỗi sai (cơ bản)', 'Tìm lỗi sai', 'Tìm lỗi tinh vi (Mức 3)'][lv], instr: 'Mỗi câu có đúng MỘT lỗi. Chọn phần chứa lỗi.', items } : null;
+    return items.length >= 3 ? { type: 'mcq', title: ['', 'Find the error', 'Find the error', 'Find the subtle error'][lv], instr: 'Each sentence has exactly ONE error. Choose the part that contains it.', items } : null;
   }
   if (kind === 'pick') { // remember: câu nào đúng?
     const nOpt = lv === 3 ? 2 : 1;
     for (const { s, cs } of pick(6)) {
       if (cs.length < nOpt) continue;
       const wr = cs.slice(0, nOpt); const opts = [s, ...wr.map(w => w.s)]; const k = (hash(s) + seed) % opts.length; const o = opts.slice(k).concat(opts.slice(0, k));
-      items.push({ q: '', options: o, a: (opts.length - k) % opts.length, ex: 'Phương án còn lại sai vì: ' + wr.map(w => w.why).join('; ') + '.' });
+      items.push({ q: '', options: o, a: (opts.length - k) % opts.length, ex: 'The other option is wrong because: ' + wr.map(w => w.why).join('; ') + '.' });
       if (items.length >= 4) break;
     }
-    return items.length >= 2 ? { type: 'mcq', title: ['', 'Nhận diện câu đúng (cơ bản)', 'Nhận diện dạng đúng', 'Nhận diện câu chính xác (Mức 3)'][lv], instr: 'Chọn câu không có lỗi.', items } : null;
+    return items.length >= 2 ? { type: 'mcq', title: ['', 'Identify the correct sentence', 'Identify the correct form', 'Identify the fully correct sentence'][lv], instr: 'Choose the sentence with no errors.', items } : null;
   }
   if (kind === 'best') { // evaluate: 2 tầng — chọn câu đúng, rồi chọn lý do câu kia sai
     for (const { s, cs } of pick(6)) {
       const c = cs[0]; const others = []; for (const t of cand) for (const x of t.cs) if (fam(x.i) !== fam(c.i) && !others.includes(x.why)) others.push(x.why);
       if (others.length < 2) continue;
       const d1 = others[(hash(s) + seed) % others.length], d2 = others[(hash(s) + seed + 1) % others.length]; if (d1 === d2) continue;
-      items.push({ q: '', options: [s, c.s], a: 0, why: { q: 'Câu còn lại sai vì:', options: [c.why, d1, d2], a: 0 } });
+      items.push({ q: '', options: [s, c.s], a: 0, why: { q: 'The other sentence is wrong because it:', options: [c.why, d1, d2], a: 0 } });
       if (items.length >= 3) break;
     }
-    return items.length >= 2 ? { type: 'mcq2', title: ['', 'Chọn câu đúng & giải thích', 'Câu nào chính xác – vì sao?', 'Chọn câu chính xác & gọi tên lỗi (Mức 3)'][lv], instr: 'Tầng 1: chọn câu không có lỗi. Tầng 2: chọn lý do câu còn lại sai. Đúng cả hai tầng mới được điểm đủ.', items } : null;
+    return items.length >= 2 ? { type: 'mcq2', title: ['', 'Choose the correct sentence & explain', 'Which sentence is correct, and why?', 'Choose the correct sentence & name the error'][lv], instr: 'Step 1: choose the sentence with no error. Step 2: choose why the other sentence is wrong. Full marks only when both steps are correct.', items } : null;
   }
   if (kind === 'why') { // understand: vì sao câu này sai?
     const allWhy = [...new Set(Object.values(LEVEL_RULES).flat().map(i => i))];
@@ -77,10 +77,10 @@ function build(kind, lv, pool, seed, unitTitle) {
       if (pool2.length < 2) continue;
       const d1 = pool2[(hash(s) + seed) % pool2.length], d2 = pool2[(hash(s) + seed + 1) % pool2.length]; if (d1 === d2) continue;
       const opts = [c.why, d1, d2]; const k = (hash(s) + seed) % 3; const o = opts.slice(k).concat(opts.slice(0, k));
-      items.push({ q: '*' + c.s + '*', options: o, a: (3 - k) % 3, ex: `Câu đúng: *${s}*` });
+      items.push({ q: '*' + c.s + '*', options: o, a: (3 - k) % 3, ex: `Correct sentence: *${s}*` });
       if (items.length >= 4) break;
     }
-    return items.length >= 3 ? { type: 'mcq', title: ['', 'Hiểu lỗi: vì sao sai? (cơ bản)', 'Hiểu lỗi: vì sao sai?', 'Hiểu lỗi tinh vi (Mức 3)'][lv], instr: 'Mỗi câu có MỘT lỗi. Chọn lý do đúng.', items } : null;
+    return items.length >= 3 ? { type: 'mcq', title: ['', 'Understand the error: why is it wrong?', 'Understand the error: why is it wrong?', 'Understand subtle errors'][lv], instr: 'Each sentence has ONE error. Choose the correct reason.', items } : null;
   }
   if (kind === 'fix') { // apply: điền dạng đúng
     for (const { s, cs } of pick(6)) {
@@ -93,7 +93,7 @@ function build(kind, lv, pool, seed, unitTitle) {
       items.push({ q, a: [ans], ex: c.why });
       if (items.length >= 4) break;
     }
-    return items.length >= 3 ? { type: 'gap', title: ['', 'Điền dạng đúng (cơ bản)', 'Điền dạng đúng của từ', 'Điền chính xác tuyệt đối (Mức 3)'][lv], instr: 'Điền dạng đúng vào chỗ trống (gợi ý trong ngoặc).', items } : null;
+    return items.length >= 3 ? { type: 'gap', title: ['', 'Fill in the correct form', 'Fill in the correct form of the word', 'Fill in with complete accuracy'][lv], instr: 'Fill in the gap with the correct form (hint in brackets).', items } : null;
   }
   return null;
 }
