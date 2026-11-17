@@ -34,457 +34,457 @@ const S2 = 'Summarise the information by selecting and reporting the main featur
 const E = 'Give reasons for your answer and include any relevant examples from your own knowledge or experience. Write at least 250 words.';
 window.KL_BANK(`
 @g1
-#create 1 write Câu đơn – ghép – phức về trường học | 40 | 1 câu đơn; 1 câu ghép; 1 câu phức
-Viết 4 câu (40–60 từ) về ngôi trường cũ của bạn: ít nhất một câu đơn, một câu ghép (and/but/so) và một câu phức (because/although/when).
-#create 2 write Đoạn văn về giao thông thành phố | 90 | cụm danh từ mở rộng; câu phức; không lặp chủ ngữ
-Viết đoạn 90–110 từ về giao thông ở thành phố bạn sống, mỗi câu một cấu trúc khác nhau.
-#create 3 write Đoạn văn học thuật về thói quen đọc | 110 | danh hoá làm chủ ngữ; câu phức tổng hợp; mệnh đề danh từ
-Chủ đề: *The decline in reading for pleasure among teenagers.* Viết đoạn 110–130 từ, mở đầu bằng cụm danh từ học thuật, có ít nhất hai câu phức tổng hợp.
+#create 1 write Simple, compound and complex sentences about school | 40 | 1 simple sentence; 1 compound sentence; 1 complex sentence
+Write 4 sentences (40–60 words) about your old school: at least one simple sentence, one compound sentence (and/but/so) and one complex sentence (because/although/when).
+#create 2 write A paragraph about city traffic | 90 | expanded noun phrases; complex sentences; no repeated subjects
+Write a 90–110-word paragraph about traffic in the city where you live, using a different structure in each sentence.
+#create 3 write An academic paragraph about reading habits | 110 | nominalised subjects; compound-complex sentences; noun clauses
+Topic: *The decline in reading for pleasure among teenagers.* Write a 110–130-word paragraph that opens with an academic noun phrase and has at least two compound-complex sentences.
 
 @g2
-#create 1 write Mô tả căn phòng | 40 | a/an/the; số ít/số nhiều; hoà hợp
-Viết 4–5 câu (40–60 từ) mô tả phòng ngủ của bạn. Dùng *a/an/the* đúng và ít nhất một danh từ không đếm được (*furniture, equipment*).
-#create 2 write Đoạn số liệu về sinh viên | 80 | the number of; the proportion of; hoà hợp chủ–vị
-Dữ liệu: *Survey of 800 students — 55% live with family, 30% rent a room, 15% live in dormitories. The number of students renting rooms has doubled since 2015.* Viết đoạn 80–100 từ, không lỗi mạo từ/hoà hợp.
-#create 3 write Đoạn Task 2 chính xác tuyệt đối | 110 | each/every/neither; danh từ trừu tượng; chủ ngữ phức
-Đề: *Is it better for children to grow up in the countryside?* Viết đoạn 110–130 từ, dùng chính xác *each of, neither... nor, the number of, information, evidence*.
+#create 1 write Describe a room | 40 | a/an/the; singular/plural; agreement
+Write 4–5 sentences (40–60 words) describing your bedroom. Use *a/an/the* correctly and at least one uncountable noun (*furniture, equipment*).
+#create 2 write A data paragraph about students | 80 | the number of; the proportion of; subject–verb agreement
+Data: *Survey of 800 students — 55% live with family, 30% rent a room, 15% live in dormitories. The number of students renting rooms has doubled since 2015.* Write an 80–100-word paragraph with no article or agreement errors.
+#create 3 write A fully accurate Task 2 paragraph | 110 | each/every/neither; abstract nouns; complex subjects
+Prompt: *Is it better for children to grow up in the countryside?* Write a 110–130-word paragraph, using *each of, neither... nor, the number of, information, evidence* accurately.
 
 @g3
-#create 1 write Kể về việc học tiếng Anh | 40 | quá khứ đơn; hiện tại hoàn thành; hiện tại đơn
-Viết 4–5 câu (40–60 từ): bạn bắt đầu học tiếng Anh khi nào (quá khứ đơn), đã học được gì đến nay (hiện tại hoàn thành), thường học thế nào (hiện tại đơn).
-#create 2 write Mô tả xu hướng giá nhà | 90 | quá khứ đơn; quá khứ hoàn thành; hiện tại hoàn thành
-Dữ liệu: *Average house price in a city (USD thousand): 2005 – 80, 2010 – 95, 2015 – 140, 2020 – 210, 2025 – 230.* Viết đoạn 90–110 từ, có *By + năm, ... had ...*.
-#create 3 write Đoạn kết hợp thực tế và dự đoán | 110 | thì chính xác; tương lai hoàn thành; is projected to
-Dữ liệu: *Population aged 65+ (% of total): 2000 – 6%, 2020 – 12%, 2040 (dự báo) – 21%, 2050 (dự báo) – 26%.* Viết đoạn 110–130 từ, ít nhất hai cách diễn đạt dự đoán.
+#create 1 write Talk about learning English | 40 | past simple; present perfect; present simple
+Write 4–5 sentences (40–60 words): when you started learning English (past simple), what you have learnt so far (present perfect) and how you usually study (present simple).
+#create 2 write Describe a trend in house prices | 90 | past simple; past perfect; present perfect
+Data: *Average house price in a city (USD thousand): 2005 – 80, 2010 – 95, 2015 – 140, 2020 – 210, 2025 – 230.* Write a 90–110-word paragraph that includes *By + year, ... had ...*.
+#create 3 write A paragraph combining actual data and projections | 110 | accurate tenses; future perfect; is projected to
+Data: *Population aged 65+ (% of total): 2000 – 6%, 2020 – 12%, 2040 (projected) – 21%, 2050 (projected) – 26%.* Write a 110–130-word paragraph with at least two ways of expressing predictions.
 
 @g4
-#create 1 write Giới thiệu một món ăn quê hương | 40 | who; which; where
-Viết 4–5 câu (40–60 từ) giới thiệu một món ăn đặc sản, dùng *who, which, where*.
-#create 2 write Giới thiệu một người truyền cảm hứng | 90 | whose; , which; when
-Viết đoạn 90–110 từ về một người truyền cảm hứng cho bạn, dùng *whose*, *, which* (thay cả mệnh đề) và *when*.
-#create 3 write Đoạn Task 2 với mệnh đề quan hệ nâng cao | 110 | giới từ + which; most of whom; the extent to which
-Đề: *Should governments fund the arts?* Viết đoạn 110–130 từ có *the extent to which, by which/through which, most of whom/many of which*.
+#create 1 write Introduce a dish from your hometown | 40 | who; which; where
+Write 4–5 sentences (40–60 words) introducing a local speciality, using *who, which, where*.
+#create 2 write Introduce an inspiring person | 90 | whose; , which; when
+Write a 90–110-word paragraph about a person who inspires you, using *whose*, *, which* (referring to a whole clause) and *when*.
+#create 3 write A Task 2 paragraph with advanced relative clauses | 110 | preposition + which; most of whom; the extent to which
+Prompt: *Should governments fund the arts?* Write a 110–130-word paragraph that includes *the extent to which, by which/through which, most of whom/many of which*.
 
 @g5
-#create 1 write Mô tả cách pha trà | 40 | bị động hiện tại; First/Then/Finally
-Viết 4–6 câu (40–60 từ) mô tả cách pha một tách trà, dùng câu bị động.
-#create 2 write Mô tả quy trình làm bánh mì | 90 | bị động; after being V3; once
-Quy trình: *mix flour, water, yeast → knead → leave to rise 1 hour → shape → bake 220°C → cool → slice and pack.* Viết đoạn 90–110 từ.
-#create 3 write Đoạn Task 2 khách quan | 110 | It is widely believed that; danh hoá; bị động + modal
-Đề: *Should fast food advertising be banned?* Viết đoạn 110–130 từ, ít nhất 2 câu bị động khách quan, 2 cụm danh hoá và 1 câu *should be + V3*.
+#create 1 write Describe how to make tea | 40 | present passive; First/Then/Finally
+Write 4–6 sentences (40–60 words) describing how to make a cup of tea, using passive sentences.
+#create 2 write Describe the bread-making process | 90 | passive; after being + past participle; once
+Process: *mix flour, water, yeast → knead → leave to rise 1 hour → shape → bake 220°C → cool → slice and pack.* Write a 90–110-word paragraph.
+#create 3 write An objective Task 2 paragraph | 110 | It is widely believed that; nominalisation; passive + modal
+Prompt: *Should fast food advertising be banned?* Write a 110–130-word paragraph with at least 2 objective passive sentences, 2 nominalised phrases and 1 *should be + past participle* sentence.
 
 @g6
-#create 1 write So sánh hai mùa | 40 | so sánh hơn; so sánh nhất; as ... as
-Viết 4–5 câu (40–60 từ) so sánh mùa hè và mùa đông ở nơi bạn sống.
-#create 2 write So sánh giá vé tàu xe | 90 | twice as...as; considerably; that of
-Dữ liệu: *Hanoi–HCMC: plane 2,000,000 VND (2h), train 1,100,000 VND (33h), coach 800,000 VND (30h).* Viết đoạn 90–110 từ so sánh giá và thời gian.
-#create 3 write So sánh đa chiều (Band 8) | 110 | by far; counterparts; whereas; the + -er, the + -er
-Dữ liệu: *Daily social media use (minutes) — Teens: 190 (girls 210, boys 170); Adults 25–44: 95; Adults 45+: 40.* Viết đoạn 110–130 từ.
+#create 1 write Compare two seasons | 40 | comparatives; superlatives; as ... as
+Write 4–5 sentences (40–60 words) comparing summer and winter where you live.
+#create 2 write Compare travel fares | 90 | twice as...as; considerably; that of
+Data: *Hanoi–HCMC: plane 2,000,000 VND (2h), train 1,100,000 VND (33h), coach 800,000 VND (30h).* Write a 90–110-word paragraph comparing price and journey time.
+#create 3 write Multi-dimensional comparison (Band 8) | 110 | by far; counterparts; whereas; the + -er, the + -er
+Data: *Daily social media use (minutes) — Teens: 190 (girls 210, boys 170); Adults 25–44: 95; Adults 45+: 40.* Write a 110–130-word paragraph.
 
 @g7
-#create 1 write Lý do bạn thích một môn học | 40 | because; so; however
-Viết 4–5 câu (40–60 từ) về môn học bạn thích, dùng *because, so, however*.
-#create 2 write Đoạn lập luận có điều kiện | 90 | điều kiện loại 1 và 2; as a result; in addition
-Đề: *What would happen if every family stopped using plastic bags?* Viết đoạn 90–110 từ.
-#create 3 write Đoạn lập luận liên kết học thuật | 110 | đảo ngữ điều kiện; Added to this; This is not to say that
-Đề: *Should the working week be reduced to four days?* Viết đoạn 110–130 từ, không dùng Firstly/Moreover/Furthermore.
+#create 1 write Why you like a school subject | 40 | because; so; however
+Write 4–5 sentences (40–60 words) about a subject you like, using *because, so, however*.
+#create 2 write An argument paragraph with conditionals | 90 | first and second conditionals; as a result; in addition
+Prompt: *What would happen if every family stopped using plastic bags?* Write a 90–110-word paragraph.
+#create 3 write An academically cohesive argument paragraph | 110 | conditional inversion; Added to this; This is not to say that
+Prompt: *Should the working week be reduced to four days?* Write a 110–130-word paragraph without using Firstly/Moreover/Furthermore.
 
 @g8
-#create 1 write Nội quy lớp học | 40 | must; should; can
-Viết 4–5 câu (40–60 từ) đề xuất nội quy lớp học, dùng *must, should, can*.
-#create 2 write Đoạn giải pháp có hedging | 90 | could; might; may well
-Đề: *How can schools reduce bullying?* Viết đoạn 90–110 từ đề xuất 2 giải pháp, tránh khẳng định tuyệt đối.
-#create 3 write Đoạn đánh giá có modal hoàn thành | 110 | could have; should have; would
-Đề: *What lessons can be learnt from the way cities handled rapid growth in the past?* Viết đoạn 110–130 từ dùng modal hoàn thành và hedging Mức 3.
+#create 1 write Classroom rules | 40 | must; should; can
+Write 4–5 sentences (40–60 words) proposing classroom rules, using *must, should, can*.
+#create 2 write A solution paragraph with hedging | 90 | could; might; may well
+Prompt: *How can schools reduce bullying?* Write a 90–110-word paragraph proposing 2 solutions, avoiding absolute claims.
+#create 3 write An evaluative paragraph with perfect modals | 110 | could have; should have; would
+Prompt: *What lessons can be learnt from the way cities handled rapid growth in the past?* Write a 110–130-word paragraph using perfect modals and advanced hedging.
 
 @g9
-#create 1 write Câu nhấn mạnh về du lịch | 30 | Never have I; Not only... but also
-Viết 3–4 câu (30–50 từ) về một chuyến đi, có 2 câu đảo ngữ.
-#create 2 write Đoạn có đảo ngữ đúng chỗ | 90 | Only by; Rarely do; không lạm dụng
-Đề: *Why is it important to protect endangered languages?* Viết đoạn 90–110 từ có 2 câu đảo ngữ.
-#create 3 write Kết luận mạnh với đảo ngữ | 90 | Only when; So + adj + that; Under no circumstances
-Đề: *Governments must act now to reduce air pollution.* Viết đoạn kết luận 90–110 từ với 2–3 cấu trúc đảo ngữ khác nhau.
+#create 1 write Emphatic sentences about travel | 30 | Never have I; Not only... but also
+Write 3–4 sentences (30–50 words) about a trip, including 2 inverted sentences.
+#create 2 write A paragraph with well-placed inversion | 90 | Only by; Rarely do; no overuse
+Prompt: *Why is it important to protect endangered languages?* Write a 90–110-word paragraph with 2 inverted sentences.
+#create 3 write A strong conclusion with inversion | 90 | Only when; So + adj + that; Under no circumstances
+Prompt: *Governments must act now to reduce air pollution.* Write a 90–110-word concluding paragraph with 2–3 different inversion structures.
 
 @g10
-#create 1 write Điều bạn tin tưởng | 40 | I believe that; What I like is; I wonder if
-Viết 4–5 câu (40–60 từ) về nghề nghiệp mơ ước, dùng ít nhất 3 mệnh đề danh từ.
-#create 2 write Mở bài + luận điểm | 90 | It is often claimed that; whether; what
-Đề: *Should schools teach financial skills?* Viết mở bài và một câu luận điểm (90–110 từ) với ít nhất 3 mệnh đề danh từ.
-#create 3 write Đoạn phân tích với mệnh đề danh từ | 110 | What... is that; Whether...; The fact that
-Đề: *Why are fewer young people interested in farming?* Viết đoạn 110–130 từ, mệnh đề danh từ làm chủ ngữ ít nhất 2 lần.
+#create 1 write Something you believe in | 40 | I believe that; What I like is; I wonder if
+Write 4–5 sentences (40–60 words) about your dream job, using at least 3 noun clauses.
+#create 2 write Introduction + thesis | 90 | It is often claimed that; whether; what
+Prompt: *Should schools teach financial skills?* Write an introduction and a thesis sentence (90–110 words) with at least 3 noun clauses.
+#create 3 write An analytical paragraph with noun clauses | 110 | What... is that; Whether...; The fact that
+Prompt: *Why are fewer young people interested in farming?* Write a 110–130-word paragraph with a noun clause as the subject at least twice.
 
 @g11
-#create 1 write Kể chuyện đi học muộn | 40 | because; although; when
-Viết 4–5 câu (40–60 từ) kể lần bạn đi học muộn, dùng *because, although, when*.
-#create 2 write Đoạn nguyên nhân – mục đích | 90 | so that; as; whereas
-Đề: *Why do many people choose to study abroad?* Viết đoạn 90–110 từ dùng ít nhất 4 liên từ trạng ngữ khác nhau.
-#create 3 write Đoạn nhượng bộ tinh tế | 110 | Much as; However + adj; provided that
-Đề: *Should children be allowed to use social media?* Viết đoạn 110–130 từ có 2 cấu trúc nhượng bộ nâng cao và 1 câu *provided that*.
+#create 1 write The time you were late for school | 40 | because; although; when
+Write 4–5 sentences (40–60 words) about a time you were late for school, using *because, although, when*.
+#create 2 write A cause–purpose paragraph | 90 | so that; as; whereas
+Prompt: *Why do many people choose to study abroad?* Write a 90–110-word paragraph using at least 4 different adverbial conjunctions.
+#create 3 write A sophisticated concession paragraph | 110 | Much as; However + adj; provided that
+Prompt: *Should children be allowed to use social media?* Write a 110–130-word paragraph with 2 advanced concession structures and 1 *provided that* sentence.
 
 @g12
-#create 1 write Mô tả một bức ảnh gia đình | 40 | V-ing; V3 rút gọn
-Viết 4–5 câu (40–60 từ) mô tả một bức ảnh gia đình, dùng cụm phân từ (*my father standing..., a cake made by...*).
-#create 2 write Đoạn ngắn gọn bằng phân từ | 90 | Having + V3; V-ing; V3
-Đề: *The advantages of learning online.* Viết đoạn 90–110 từ có ít nhất 3 cụm phân từ khác loại.
-#create 3 write Đoạn Band 8 với phân từ | 110 | Faced with; thereby; with + N + V-ing; Given
-Đề: *The impact of automation on factory workers.* Viết đoạn 110–130 từ.
+#create 1 write Describe a family photo | 40 | V-ing; reduced past participle clauses
+Write 4–5 sentences (40–60 words) describing a family photo, using participle phrases (*my father standing..., a cake made by...*).
+#create 2 write A concise paragraph with participles | 90 | Having + V3; V-ing; V3
+Prompt: *The advantages of learning online.* Write a 90–110-word paragraph with at least 3 participle phrases of different types.
+#create 3 write A Band 8 paragraph with participles | 110 | Faced with; thereby; with + N + V-ing; Given
+Prompt: *The impact of automation on factory workers.* Write a 110–130-word paragraph.
 
 @g13
-#create 1 write Liệt kê việc nhà | 40 | liệt kê song song; both...and
-Viết 4–5 câu (40–60 từ) về việc nhà bạn làm, có 2 liệt kê song song và một câu *both... and*.
-#create 2 write Đoạn liệt kê lợi ích | 90 | not only...but also; liệt kê 3 vế; song song mệnh đề
-Đề: *The benefits of volunteering.* Viết đoạn 90–110 từ, mọi liệt kê đều song song.
-#create 3 write Đoạn thuyết phục có nhịp | 110 | điệp cấu trúc; whether by...; song song mệnh đề
-Đề: *How can cities become more liveable?* Viết đoạn 110–130 từ có một câu điệp cấu trúc 3 vế.
+#create 1 write List your household chores | 40 | parallel lists; both...and
+Write 4–5 sentences (40–60 words) about the chores you do, with 2 parallel lists and one *both... and* sentence.
+#create 2 write A paragraph listing benefits | 90 | not only...but also; 3-part lists; parallel clauses
+Prompt: *The benefits of volunteering.* Write a 90–110-word paragraph in which every list is parallel.
+#create 3 write A persuasive paragraph with rhythm | 110 | repeated structures; whether by...; parallel clauses
+Prompt: *How can cities become more liveable?* Write a 110–130-word paragraph with one three-part parallel structure.
 
 @g14
-#create 1 write Sửa đoạn văn ngắn | 30 | không fragment; không comma splice
-Sửa và viết lại (30–50 từ): *"Because I like football. I play every weekend, my team is good. Very fun."*
-#create 2 write Viết lại đoạn choppy | 80 | gộp câu; liên từ; không lỗi câu
-Viết lại (80–100 từ): *"Da Lat is a city. It is in the highlands. It is cool. Many couples go there. They take photos. The flowers are beautiful. The coffee is good."*
-#create 3 write Biên tập đoạn nhiều lỗi (Band 8) | 100 | không fragment/run-on; không dangling; câu đa dạng
-Biên tập (100–120 từ): *"Being a crowded city, traffic jams happen every day. People are late, they are stressed and they are angry and they honk. A serious problem. The government should do something it is urgent."*
+#create 1 write Fix a short paragraph | 30 | no fragments; no comma splices
+Correct and rewrite (30–50 words): *"Because I like football. I play every weekend, my team is good. Very fun."*
+#create 2 write Rewrite a choppy paragraph | 80 | combining sentences; conjunctions; no sentence errors
+Rewrite (80–100 words): *"Da Lat is a city. It is in the highlands. It is cool. Many couples go there. They take photos. The flowers are beautiful. The coffee is good."*
+#create 3 write Edit an error-filled paragraph (Band 8) | 100 | no fragments/run-ons; no dangling participles; varied sentences
+Edit (100–120 words): *"Being a crowded city, traffic jams happen every day. People are late, they are stressed and they are angry and they honk. A serious problem. The government should do something it is urgent."*
 
 @g15
-#create 1 write 4 câu, 4 cấu trúc | 40 | câu đơn; câu ghép; mệnh đề quan hệ; mệnh đề trạng ngữ
-Chủ đề: *Your best friend.* Viết 4 câu (40–60 từ), mỗi câu một cấu trúc khác nhau.
-#create 2 write Đoạn văn tự bóc tách | 90 | ≥4 cấu trúc khác nhau
-Chủ đề: *The importance of sleep for students.* Viết đoạn 90–110 từ có ít nhất 4 cấu trúc khác nhau.
-#create 3 write Đoạn Band 8 đủ 6 cấu trúc | 120 | danh hoá; mệnh đề danh từ; phân từ; đảo ngữ; mệnh đề quan hệ có lượng từ; nhượng bộ
-Chủ đề: *The rise of electric motorbikes in Vietnam.* Viết đoạn 120–140 từ dùng đủ 6 cấu trúc.
+#create 1 write 4 sentences, 4 structures | 40 | simple sentence; compound sentence; relative clause; adverbial clause
+Topic: *Your best friend.* Write 4 sentences (40–60 words), each with a different structure.
+#create 2 write A self-analysed paragraph | 90 | ≥4 different structures
+Topic: *The importance of sleep for students.* Write a 90–110-word paragraph with at least 4 different structures.
+#create 3 write A Band 8 paragraph with all 6 structures | 120 | nominalisation; noun clause; participle; inversion; relative clause with a quantifier; concession
+Topic: *The rise of electric motorbikes in Vietnam.* Write a 120–140-word paragraph using all 6 structures.
 
 @g16
-#create 1 write Tự viết và tự soát | 40 | không lỗi hoà hợp; mạo từ; giới từ
-Viết 4–5 câu (40–60 từ) về món ăn yêu thích, sau đó tự soát lỗi hoà hợp, mạo từ và giới từ.
-#create 2 write Biên tập đoạn Band 6 | 90 | sửa lỗi; referencing; đa dạng câu
-Biên tập (90–110 từ): *"Nowadays, the people is very busy. Firstly, they works a lot. Secondly, they don't have time for cook. Thirdly, they eat fast food. So the health is bad."*
-#create 3 write Tự viết – tự biên tập (Band 8) | 110 | 0 lỗi; nominalisation; referencing
-Đề: *Should homework be banned in primary schools?* Viết đoạn 110–130 từ, rồi tự soát theo check-list Grammar Nazi trước khi gửi chấm.
+#create 1 write Write and check your own work | 40 | no agreement, article or preposition errors
+Write 4–5 sentences (40–60 words) about your favourite food, then check your own agreement, article and preposition errors.
+#create 2 write Edit a Band 6 paragraph | 90 | error correction; referencing; varied sentences
+Edit (90–110 words): *"Nowadays, the people is very busy. Firstly, they works a lot. Secondly, they don't have time for cook. Thirdly, they eat fast food. So the health is bad."*
+#create 3 write Write and self-edit (Band 8) | 110 | 0 errors; nominalisation; referencing
+Prompt: *Should homework be banned in primary schools?* Write a 110–130-word paragraph, then check it against the Grammar Nazi checklist before submitting it for marking.
 
 @t1a
-#create 1 write Intro + Overview có hướng dẫn | 45 | paraphrase; Overview 2 ý | CINEMA
-Chỉ viết Introduction + Overview (50–70 từ).
+#create 1 write Guided Intro + Overview | 45 | paraphrasing; a 2-point overview | CINEMA
+Write only the Introduction + Overview (50–70 words).
 
 The graph below shows the percentage of people in four age groups who went to the cinema at least once a month between 2000 and 2024.
 
-Khung gợi ý: *The line graph illustrates ... Overall, while ..., ...*
-#create 2 write Intro + Overview: bán sách | 50 | paraphrase sâu; Overview không số liệu | BOOKS
-Viết Introduction + Overview (60–80 từ).
+Suggested frame: *The line graph illustrates ... Overall, while ..., ...*
+#create 2 write Intro + Overview: book sales | 50 | thorough paraphrase; an Overview without figures | BOOKS
+Write the Introduction + Overview (60–80 words).
 
 The chart below shows sales of books by format in a country in 2014 and 2024.
-#create 3 write Bài hoàn chỉnh: rạp chiếu phim (Band 8) | 150 | Overview 2 ý; điểm giao cắt; nhóm tuổi | CINEMA
+#create 3 write Full report: cinemas (Band 8) | 150 | a 2-point Overview; crossover points; age groups | CINEMA
 The graph below shows the percentage of people in four age groups who went to the cinema at least once a month between 2000 and 2024.
 
 ${S1}
 
 @t1b
-#create 1 write Intro + Overview: hành khách giao thông | 45 | paraphrase; xu hướng chính | TRANSIT
-Chỉ viết Introduction + Overview (50–70 từ).
+#create 1 write Intro + Overview: transport passengers | 45 | paraphrase; main trends | TRANSIT
+Write only the Introduction + Overview (50–70 words).
 
 The graph below shows the average number of daily passengers on three transport systems in a city between 2010 and 2025.
 
-Khung gợi ý: *The line graph compares ... Overall, ... whereas ...*
-#create 2 write Line graph: hành khách giao thông | 150 | động từ + danh từ xu hướng; mốc xuất hiện Metro | TRANSIT
+Suggested frame: *The line graph compares ... Overall, ... whereas ...*
+#create 2 write Line graph: transport passengers | 150 | trend verbs + nouns; the point when the Metro appears | TRANSIT
 The graph below shows the average number of daily passengers on three transport systems in a city between 2010 and 2025.
 
 ${S1}
-#create 3 write Line graph: rạp chiếu phim (Band 8) | 150 | xu hướng đối lập; điểm giao cắt; Super Boosters | CINEMA
+#create 3 write Line graph: cinemas (Band 8) | 150 | opposing trends; crossover points; Super Boosters | CINEMA
 The graph below shows the percentage of people in four age groups who went to the cinema at least once a month between 2000 and 2024.
 
 ${S1}
 
 @t1c
-#create 1 write Intro + Overview: giấc ngủ | 45 | paraphrase; Overview khác biệt chính | SLEEP
-Chỉ viết Introduction + Overview (50–70 từ).
+#create 1 write Intro + Overview: sleep | 45 | paraphrase; an Overview of the main differences | SLEEP
+Write only the Introduction + Overview (50–70 words).
 
 The chart below shows the average hours of sleep per night by age group and gender in 2023.
 
-Khung gợi ý: *The bar chart compares ... Overall, ...*
-#create 3 write No change: chi tiêu sinh viên (Band 8) | 150 | so sánh gấp; respectively; nhóm hạng mục | SPEND
+Suggested frame: *The bar chart compares ... Overall, ...*
+#create 3 write No change: student spending (Band 8) | 150 | multiples; respectively; grouping categories | SPEND
 The chart below shows the average monthly spending of university students in two countries in 2024.
 
 ${S1}
 
 @t1g
-#create 1 write Intro + Overview: du lịch quốc tế | 45 | paraphrase; Overview cả lượng khách và chi tiêu | TOURISM
-Chỉ viết Introduction + Overview (50–70 từ).
+#create 1 write Intro + Overview: international tourism | 45 | paraphrase; an Overview of both visitor numbers and spending | TOURISM
+Write only the Introduction + Overview (50–70 words).
 
 The table below shows international tourist arrivals and average spending per visitor in four countries in 2015 and 2024.
-#create 2 write Mixed: du lịch quốc tế | 150 | liên hệ hai chỉ số; chuyển đoạn | TOURISM
+#create 2 write Mixed: international tourism | 150 | linking the two measures; paragraph transitions | TOURISM
 The table below shows international tourist arrivals and average spending per visitor in four countries in 2015 and 2024.
 
 ${S1}
-#create 3 write Mixed: rác thải & tái chế (Band 8) | 150 | liên hệ lượng rác và tỷ lệ tái chế; nhóm thành phố | WASTE2
+#create 3 write Mixed: waste & recycling (Band 8) | 150 | linking waste volume and recycling rate; grouping cities | WASTE2
 The table below shows the amount of household waste produced per person and the recycling rate in five Asian cities in 2024.
 
 ${S1}
 
 @t1d
-#create 1 write Intro + Overview: năng lượng gia đình | 45 | paraphrase; thay đổi lớn nhất | ENERGYHOME
-Chỉ viết Introduction + Overview (50–70 từ).
+#create 1 write Intro + Overview: household energy | 45 | paraphrase; the biggest change | ENERGYHOME
+Write only the Introduction + Overview (50–70 words).
 
 The pie charts below show how households in Country D used energy in 2005 and 2025.
-#create 2 write Pie 2 mốc: năng lượng gia đình | 150 | phân số; chia đoạn theo xu hướng | ENERGYHOME
+#create 2 write Two-year pie charts: household energy | 150 | fractions; paragraphing by trend | ENERGYHOME
 The pie charts below show how households in Country D used energy in 2005 and 2025.
 
 ${S1}
-#create 3 write Pie 2 mốc: mục đích chuyến đi (Band 8) | 150 | phân số chính xác; overtake; nhóm hạng mục | TRAVELPIE
+#create 3 write Two-year pie charts: trip purposes (Band 8) | 150 | accurate fractions; overtake; grouping categories | TRAVELPIE
 The pie charts below show the main purposes of international trips made by residents of a country in 2012 and 2024.
 
 ${S1}
 
 @t1e
-#create 1 write Intro + Overview: làm phô mai | 45 | paraphrase; số bước, đầu–cuối | CHEESE
-Chỉ viết Introduction + Overview (50–70 từ).
+#create 1 write Intro + Overview: cheese-making | 45 | paraphrase; number of stages, first–last | CHEESE
+Write only the Introduction + Overview (50–70 words).
 
 The diagram below shows how cheese is made.
-#create 3 write Natural process: vòng đời cá hồi (Band 8) | 150 | chủ động cho tự nhiên; chu trình; câu nối Mức 3 | SALMON
+#create 3 write Natural process: the salmon life cycle (Band 8) | 150 | the active for natural stages; a cycle; advanced linking sentences | SALMON
 The diagram below shows the life cycle of the salmon.
 
 ${S2}
 
 @t1f
-#create 1 write Intro + Overview: công viên | 45 | paraphrase; xu hướng chung | PARK
-Chỉ viết Introduction + Overview (50–70 từ).
+#create 1 write Intro + Overview: a park | 45 | paraphrase; the general pattern | PARK
+Write only the Introduction + Overview (50–70 words).
 
 The maps below show a city park in 2000 and today.
-#create 2 write Map: công viên | 150 | bị động; vị trí; nhóm thay đổi | PARK
+#create 2 write Map: a park | 150 | passive; location; grouping changes | PARK
 The maps below show a city park in 2000 and today.
 
 ${S1}
-#create 3 write Map: khu ga tàu (Band 8) | 150 | xu hướng chuyển đổi; give way to; nhóm theo khu vực | STATION
+#create 3 write Map: a railway station area (Band 8) | 150 | patterns of conversion; give way to; grouping by area | STATION
 The maps below show the area around a town railway station in 1990 and 2025.
 
 ${S1}
 
 @t1h
-#create 1 write Intro + Overview: rừng che phủ | 45 | paraphrase; xu hướng + dự báo | FOREST
-Chỉ viết Introduction + Overview (50–70 từ).
+#create 1 write Intro + Overview: forest cover | 45 | paraphrase; trends + projections | FOREST
+Write only the Introduction + Overview (50–70 words).
 
 The graph below shows forest cover in four countries from 1990 to 2025, with projections for 2030.
-#create 3 write Change over time: rừng che phủ (Band 8) | 150 | chọn lọc số liệu; hai xu hướng đối lập; dự báo | FOREST
+#create 3 write Change over time: forest cover (Band 8) | 150 | selecting figures; two opposing trends; projections | FOREST
 The graph below shows forest cover in four countries from 1990 to 2025, with projections for 2030.
 
 ${S1}
 
 @t1i
-#create 1 write Body ngắn dùng 3 boosters | 60 | followed by; while; V-ing kết quả | BOOKS
-Viết MỘT đoạn thân bài (60–80 từ) về Printed fiction, E-books và Audiobooks, dùng ít nhất 3 boosters.
+#create 1 write A short body paragraph with 3 boosters | 60 | followed by; while; result V-ing | BOOKS
+Write ONE body paragraph (60–80 words) about Printed fiction, E-books and Audiobooks, using at least 3 boosters.
 
 The chart below shows sales of books by format in a country in 2014 and 2024.
-#create 2 write Bài dùng boosters: bán sách | 150 | ≥5 boosters; nhóm hạng mục | BOOKS
+#create 2 write A report with boosters: book sales | 150 | ≥5 boosters; grouping categories | BOOKS
 The chart below shows sales of books by format in a country in 2014 and 2024.
 
 ${S1}
-#create 3 write Bài dùng 7 boosters: du lịch (Band 8) | 150 | ≥7 boosters; liên hệ hai chỉ số | TOURISM
+#create 3 write A report with 7 boosters: tourism (Band 8) | 150 | ≥7 boosters; linking the two measures | TOURISM
 The table below shows international tourist arrivals and average spending per visitor in four countries in 2015 and 2024.
 
 ${S1}
 
 @t1j
-#create 1 write Intro + Overview: 6 khoản chi | 45 | paraphrase; Overview nhóm hạng mục | SPEND
-Chỉ viết Introduction + Overview (50–70 từ).
+#create 1 write Intro + Overview: 6 spending categories | 45 | paraphrasing; an overview grouping the categories | SPEND
+Write only the Introduction + Overview (50–70 words).
 
 The chart below shows the average monthly spending of university students in two countries in 2024.
-#create 2 write 6 hạng mục: chi tiêu sinh viên | 150 | nhóm hạng mục; so sánh hai nước | SPEND
+#create 2 write 6 categories: student spending | 150 | grouping categories; comparing two countries | SPEND
 The chart below shows the average monthly spending of university students in two countries in 2024.
 
 ${S1}
-#create 3 write 5 hạng mục × 2 nước: điện thoại (Band 8) | 150 | nhóm tuổi theo khoảng cách; so sánh gấp | PHONES2
+#create 3 write 5 categories × 2 countries: phones (Band 8) | 150 | grouping age groups by gap; multiples | PHONES2
 The chart below shows smartphone ownership by age group in two countries in 2024.
 
 ${S1}
 
 @t1k
-#create 1 write Intro + Overview có dự báo & Total | 45 | paraphrase; Overview gồm Total | FUTUREJOBS
-Chỉ viết Introduction + Overview (50–70 từ).
+#create 1 write Intro + Overview with projections & Total | 45 | paraphrasing; an overview including the Total | FUTUREJOBS
+Write only the Introduction + Overview (50–70 words).
 
 The graph below shows employment in three sectors and in total in Country E from 2000 to 2025, with projections to 2040.
-#create 3 write Dự báo + Total: việc làm (Band 8) | 150 | quá khứ + dự đoán; Total; điểm giao cắt | FUTUREJOBS
+#create 3 write Projections + Total: employment (Band 8) | 150 | past + prediction; Total; crossover points | FUTUREJOBS
 The graph below shows employment in three sectors and in total in Country E from 2000 to 2025, with projections to 2040.
 
 ${S1}
 
 @t1l
-#create 1 write Intro + Overview: bảng sinh viên | 45 | paraphrase; Overview 2 ý | UNI
-Chỉ viết Introduction + Overview (50–70 từ).
+#create 1 write Intro + Overview: a student table | 45 | paraphrasing; a 2-point overview | UNI
+Write only the Introduction + Overview (50–70 words).
 
 The table below shows the number of male and female students in four faculties of a university in 2024.
 
 @t1m
-#create 1 write Intro + Overview: tuabin gió | 45 | paraphrase; đầu vào – đầu ra | WINDMILL
-Chỉ viết Introduction + Overview (50–70 từ).
+#create 1 write Intro + Overview: a wind turbine | 45 | paraphrase; input – output | WINDMILL
+Write only the Introduction + Overview (50–70 words).
 
 The diagram below shows how a wind turbine generates electricity.
-#create 2 write How it works: tuabin gió | 150 | chủ động/bị động hợp lý; từ nối | WINDMILL
+#create 2 write How it works: a wind turbine | 150 | appropriate active/passive; linkers | WINDMILL
 The diagram below shows how a wind turbine generates electricity.
 
 ${S2}
-#create 3 write Process: tái chế giấy (Band 8) | 150 | bị động + rút gọn; Overview đầu–cuối; câu nối Mức 3 | PAPER
+#create 3 write Process: paper recycling (Band 8) | 150 | passive + reduced clauses; a first–last Overview; advanced linking sentences | PAPER
 The diagram below shows how paper is recycled.
 
 ${S2}
 
 @t2a
-#create 1 write Phân tích đề + mở bài có hướng dẫn | 60 | topic/task; paraphrase; thesis
-Đề: *Some people believe that every child should learn to play a musical instrument. Do you agree?*
+#create 1 write Guided prompt analysis + introduction | 60 | topic/task; paraphrase; thesis
+Prompt: *Some people believe that every child should learn to play a musical instrument. Do you agree?*
 
-Ghi topic, task, scope rồi viết Introduction (2 câu).
+Note the topic, task and scope, then write the Introduction (2 sentences).
 
-Khung gợi ý: *It is sometimes argued that ... I (partly) agree because ...*
-#create 2 write Introduction cho 4 đề | 100 | paraphrase; thesis đúng dạng
-Viết Introduction (2 câu mỗi đề):
+Suggested frame: *It is sometimes argued that ... I (partly) agree because ...*
+#create 2 write Introductions for 4 prompts | 100 | paraphrasing; a thesis matching the type
+Write an introduction (2 sentences per prompt):
 1. *Should old buildings be protected even if this stops a city from growing?*
 2. *More people are working from cafés and shared offices. Positive or negative?*
 3. *Why do many people not exercise enough? What can be done?*
 4. *Some think news should be free; others think people should pay for it. Discuss both views.*
-#create 3 write Phân tích đề lắt léo (Band 8) | 120 | scope; thesis tinh tế; tránh bẫy
-Đề: *The best way to improve road safety is to give much harsher punishments to dangerous drivers. To what extent do you agree?*
+#create 3 write Analysing tricky prompts (Band 8) | 120 | scope; a nuanced thesis; avoiding traps
+Prompt: *The best way to improve road safety is to give much harsher punishments to dangerous drivers. To what extent do you agree?*
 
-Viết Introduction + dàn ý 2 thân bài (120–150 từ), chỉ rõ cách xử lý "the best way".
+Write an Introduction + an outline of 2 body paragraphs (120–150 words), showing clearly how you handle "the best way".
 
 @t2b
-#create 1 write Đoạn 1 ý có hướng dẫn | 60 | topic sentence; because; for example
-Đề: *Should students wear school uniforms?* Viết MỘT đoạn 1 ý (60–80 từ).
+#create 1 write A guided one-idea paragraph | 60 | topic sentence; because; for example
+Prompt: *Should students wear school uniforms?* Write ONE one-idea paragraph (60–80 words).
 
-Khung gợi ý: *One clear benefit of ... is that ... This is because ... For example, ...*
-#create 3 write Đoạn 2 ý chặt chẽ (Band 8) | 130 | 2 ý ngang hàng; chain of consequences; ví dụ khái quát
-Đề: *What are the benefits of cities investing in cycle lanes?* Viết MỘT đoạn 2 ý (130–150 từ).
+Suggested frame: *One clear benefit of ... is that ... This is because ... For example, ...*
+#create 3 write A tight two-idea paragraph (Band 8) | 130 | 2 equal ideas; a chain of consequences; general examples
+Prompt: *What are the benefits of cities investing in cycle lanes?* Write ONE two-idea paragraph (130–150 words).
 
 @t2c
-#create 1 write Opinion có hướng dẫn | 110 | thesis rõ; topic sentence; ví dụ
-Đề: *Some people think that students should study only subjects they enjoy. To what extent do you agree?*
+#create 1 write A guided opinion essay | 110 | a clear thesis; topic sentences; examples
+Prompt: *Some people think that students should study only subjects they enjoy. To what extent do you agree?*
 
-Viết Introduction + MỘT đoạn thân bài (110–140 từ).
+Write an introduction + ONE body paragraph (110–140 words).
 
-Khung gợi ý: *It is sometimes suggested that ... I disagree because ... The main reason is that ...*
-#create 3 write Opinion "the only way" (Band 8) | 250 | thesis No có nhượng bộ; giải pháp thay thế; hedging
+Suggested frame: *It is sometimes suggested that ... I disagree because ... The main reason is that ...*
+#create 3 write Opinion "the only way" (Band 8) | 250 | a No thesis with a concession; alternative solutions; hedging
 Some people say that the only way to reduce plastic pollution is to ban single-use plastics completely. To what extent do you agree or disagree?
 
 ${E}
 
 @t2d
-#create 1 write Discussion có hướng dẫn | 110 | Intro nêu 2 phía; một đoạn thân bài
-Đề: *Some think young people should save money for the future; others think they should enjoy it now. Discuss both views and give your opinion.*
+#create 1 write A guided discussion essay | 110 | an introduction stating both sides; one body paragraph
+Prompt: *Some think young people should save money for the future; others think they should enjoy it now. Discuss both views and give your opinion.*
 
-Viết Introduction + Body 1 (110–140 từ).
-#create 2 write Discussion: thành phố hay nông thôn | 250 | cân bằng 2 phía; ý kiến rõ
+Write an introduction + Body 1 (110–140 words).
+#create 2 write Discussion: city or countryside | 250 | balancing both sides; a clear opinion
 Some people prefer to raise children in big cities, while others believe the countryside is a better environment. Discuss both views and give your own opinion.
 
 ${E}
-#create 3 write Advantages outweigh (Band 8) | 250 | cân nhắc trọng số; thesis tinh tế
+#create 3 write Advantages outweigh (Band 8) | 250 | weighing the sides; a nuanced thesis
 More and more people are using artificial intelligence tools at work. Do the advantages of this development outweigh the disadvantages?
 
 ${E}
 
 @t2e
-#create 1 write Problem–Solution có hướng dẫn | 110 | Intro; 1 đoạn vấn đề + giải pháp
-Đề: *Many young people spend too much time on their phones. What problems does this cause and what can be done?*
+#create 1 write A guided problem–solution essay | 110 | Intro; 1 problem + solution paragraph
+Prompt: *Many young people spend too much time on their phones. What problems does this cause and what can be done?*
 
-Viết Introduction + MỘT đoạn thân bài (110–140 từ).
-#create 2 write Problem–Solution: ngập lụt đô thị | 250 | vấn đề cụ thể; giải pháp khớp
+Write an introduction + ONE body paragraph (110–140 words).
+#create 2 write Problem–Solution: urban flooding | 250 | specific problems; matching solutions
 Many cities suffer from flooding during the rainy season. What problems does this cause, and what measures could be taken?
 
 ${E}
-#create 3 write Problem–Solution 2 phần (Band 8) | 250 | vấn đề sâu; giải pháp khả thi; chuỗi hệ quả
+#create 3 write A two-part problem–solution essay (Band 8) | 250 | in-depth problems; feasible solutions; chains of consequences
 In many countries, there is a shortage of teachers. What are the consequences of this problem, and how could it be solved?
 
 ${E}
 
 @t2f
-#create 1 write Đoạn chú trọng collocation | 60 | collocation; không lặp từ
-Đề: *Why do people keep pets?* Viết đoạn 60–80 từ, dùng 3 collocation và không lặp danh từ chính quá 2 lần.
-#create 2 write Đoạn CC – LR – GRA | 120 | referencing; collocation; câu phức
-Đề: *Should museums be free for everyone?* Viết MỘT đoạn thân bài (120–140 từ).
-#create 3 write Bài hoàn chỉnh chú trọng LR & GRA (Band 8) | 250 | collocation chính xác; câu đa dạng; referencing
+#create 1 write A paragraph focusing on collocations | 60 | collocations; no repeated words
+Prompt: *Why do people keep pets?* Write a 60–80-word paragraph using 3 collocations, without repeating the main noun more than twice.
+#create 2 write A CC – LR – GRA paragraph | 120 | referencing; collocations; complex sentences
+Prompt: *Should museums be free for everyone?* Write ONE body paragraph (120–140 words).
+#create 3 write A complete essay focusing on LR & GRA (Band 8) | 250 | accurate collocations; varied sentences; referencing
 Some people believe that technology has made people less creative. To what extent do you agree or disagree?
 
 ${E}
 
 @t2g
-#create 1 write Đoạn counter có hướng dẫn | 60 | It is true that; However; khẳng định lại
-Đề: *Should junk food be banned in schools?* (bạn chọn: Yes) Viết đoạn counter-argument (60–80 từ).
-#create 2 write Bài Opinion có counter-argument | 250 | đoạn counter đầy đủ; phản bác trực tiếp
+#create 1 write A guided counter-argument paragraph | 60 | It is true that; However; restating your view
+Prompt: *Should junk food be banned in schools?* (your choice: Yes) Write a counter-argument paragraph (60–80 words).
+#create 2 write An Opinion essay with a counter-argument | 250 | a complete counter-argument paragraph; a direct rebuttal
 Some people believe that university students should pay the full cost of their studies. To what extent do you agree or disagree?
 
 ${E}
-#create 3 write Bài Opinion có counter Band 8 | 250 | nhượng bộ công bằng; phản bác có bằng chứng; liên kết học thuật
+#create 3 write An Opinion essay with a counter-argument (Band 8) | 250 | a fair concession; an evidence-based rebuttal; academic cohesion
 Some people think that zoos have no place in the modern world. To what extent do you agree or disagree?
 
 ${E}
 
 @t2h
-#create 1 write Viết lại đoạn đầy no-no | 60 | 0 viết tắt; 0 etc.; 0 câu hỏi tu từ
-Viết lại (60–80 từ): *"Kids nowadays don't wanna go outside!!! They just stay home, play games, watch YouTube, etc. Isn't that sad?"*
-#create 2 write Đoạn thân bài không no-no | 120 | giọng học thuật; ví dụ khái quát
-Đề: *Should the government limit the number of cars each family can own?* Viết MỘT đoạn thân bài (120–140 từ) không vi phạm no-no.
-#create 3 write Bài hoàn chỉnh 0 no-no (Band 8) | 250 | 0 no-no; kết luận không thêm ý mới
+#create 1 write Rewrite a paragraph full of no-nos | 60 | 0 contractions; 0 etc.; 0 rhetorical questions
+Rewrite (60–80 words): *"Kids nowadays don't wanna go outside!!! They just stay home, play games, watch YouTube, etc. Isn't that sad?"*
+#create 2 write A body paragraph with no no-nos | 120 | an academic tone; general examples
+Prompt: *Should the government limit the number of cars each family can own?* Write ONE body paragraph (120–140 words) with no no-nos.
+#create 3 write A full essay with zero no-nos (Band 8) | 250 | zero no-nos; a conclusion with no new ideas
 Some people think that it is a waste of time for students to study history. To what extent do you agree or disagree?
 
 ${E}
 
 @t2i
-#create 1 write Should có hướng dẫn | 110 | thesis Should; một đoạn lý do
-Đề: *Should public transport be free for students?*
+#create 1 write A guided Should essay | 110 | a Should thesis; one paragraph of reasons
+Prompt: *Should public transport be free for students?*
 
-Viết Introduction + MỘT đoạn thân bài (110–140 từ).
-#create 3 write Each is better for a group (Band 8) | 250 | thesis chia nhóm; so sánh trực tiếp
+Write an introduction + ONE body paragraph (110–140 words).
+#create 3 write Each is better for a group (Band 8) | 250 | a group-based thesis; direct comparison
 Some people think it is better to work for a large company, while others prefer a small business. Which do you think is better?
 
 ${E}
 
 @t2j
-#create 1 write Positive/negative có hướng dẫn | 110 | thesis rõ; một đoạn lý do
-Đề: *More people are buying second-hand clothes. Is this a positive or negative development?*
+#create 1 write Guided positive/negative essay | 110 | a clear thesis; one paragraph of reasons
+Prompt: *More people are buying second-hand clothes. Is this a positive or negative development?*
 
-Viết Introduction + MỘT đoạn thân bài (110–140 từ).
-#create 2 write Positive or negative | 250 | thesis rõ; nhượng bộ; kết luận khớp
+Write an introduction + ONE body paragraph (110–140 words).
+#create 2 write Positive or negative | 250 | a clear thesis; concession; a matching conclusion
 In many countries, more people are moving from cities to small towns. Is this a positive or negative development?
 
 ${E}
-#create 3 write Positive/negative chia nhóm (Band 8) | 250 | thesis chia nhóm; lập luận cân bằng; hedging
+#create 3 write Positive/negative split by group (Band 8) | 250 | a grouping thesis; balanced arguments; hedging
 Many children now learn to use computers before they learn to read. Is this a positive or negative development?
 
 ${E}
 
 @t2k
-#create 1 write Causes có hướng dẫn | 110 | Intro; một đoạn nguyên nhân
-Đề: *Fewer young people are choosing to become teachers. Why? What effects does this have?*
+#create 1 write A guided causes essay | 110 | an introduction; one causes paragraph
+Prompt: *Fewer young people are choosing to become teachers. Why? What effects does this have?*
 
-Viết Introduction + đoạn Nguyên nhân (110–140 từ).
-#create 2 write Causes – Effects | 250 | nguyên nhân cụ thể; hệ quả; ví dụ
+Write an introduction + a causes paragraph (110–140 words).
+#create 2 write Causes – Effects | 250 | specific causes; effects; examples
 In many cities, the number of small family-run shops is falling. What are the causes of this, and what effects does it have on communities?
 
 ${E}
-#create 3 write Causes – Solutions (Band 8) | 250 | nguyên nhân sâu xa; giải pháp khớp
+#create 3 write Causes – Solutions (Band 8) | 250 | deep causes; matching solutions
 Many people today feel lonely despite being more connected than ever. What are the causes of this, and what can be done?
 
 ${E}
 
 @t2l
-#create 1 write Tự soát theo check-list | 110 | Intro có thesis; topic sentence; không no-no
-Đề: *Should children be taught to grow their own food at school?*
+#create 1 write Self-check with the checklist | 110 | a thesis in the introduction; topic sentences; no no-nos
+Prompt: *Should children be taught to grow their own food at school?*
 
-Viết Introduction + MỘT đoạn thân bài (110–140 từ), rồi tự đánh dấu theo check-list.
-#create 2 write Bài hoàn chỉnh + check-list | 250 | đủ 4 phần; thesis khớp kết luận
+Write an Introduction + ONE body paragraph (110–140 words), then mark it yourself against the checklist.
+#create 2 write A complete essay + checklist | 250 | all 4 parts; the thesis matches the conclusion
 Some people think that the government should spend more money on public libraries, while others think the money is better spent on the internet. Discuss both views and give your opinion.
 
 ${E}
-#create 3 write Bài tự chấm check-list (Band 8) | 250 | đủ check-list TR/CC/LR/GRA; phát triển sâu
+#create 3 write A self-marked checklist essay (Band 8) | 250 | the full TR/CC/LR/GRA checklist; in-depth development
 Some people believe that international sporting events, such as the Olympics, bring more benefits than costs to the host country. To what extent do you agree or disagree?
 
 ${E}
 
 @t2m
-#create 1 write "The best" có hướng dẫn | 110 | thesis No; một đoạn thừa nhận
-Đề: *The best way to make friends is through social media.*
+#create 1 write A guided "The best" essay | 110 | a No thesis; one acknowledging paragraph
+Prompt: *The best way to make friends is through social media.*
 
-Viết Introduction + Body 1 (110–140 từ).
-#create 2 write "The most important" | 250 | thesis rõ; so sánh với yếu tố khác
+Write an introduction + Body 1 (110–140 words).
+#create 2 write "The most important" | 250 | a clear thesis; comparison with other factors
 Some people say that the most important factor for success at university is intelligence. To what extent do you agree or disagree?
 
 ${E}
-#create 3 write "The best way" hướng Yes (Band 8) | 250 | thesis Yes; chứng minh vượt trội so với cách khác
+#create 3 write "The best way" with a Yes answer (Band 8) | 250 | a Yes thesis; proving it is better than other ways
 Some people say that the best way to learn about a country's culture is to live with a local family. To what extent do you agree or disagree?
 
 ${E}

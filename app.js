@@ -287,7 +287,7 @@ const RENDER = {};
 RENDER.mcq = (ex, body, actions, o) => {
   ex.items.forEach((it, i) => {
     const name = 'q' + Math.random().toString(36).slice(2);
-    const opts = it.options.map((op, k) => `<label class="opt"><input type="radio" name="${name}" value="${k}"><span>${fmt(op)}</span></label>`).join('');
+    const opts = shuffle([...it.options.keys()]).map(k => `<label class="opt" data-k="${k}"><input type="radio" name="${name}" value="${k}"><span>${fmt(it.options[k])}</span></label>`).join('');
     body.appendChild(h(`<div class="item" data-i="${i}"><div><span class="qnum">${i + 1}.</span>${fmt(it.q)}</div><div class="opts">${opts}</div><div class="fbk"></div></div>`));
   });
   const check = h('<button class="btn primary">Kiểm tra</button>');
@@ -295,10 +295,10 @@ RENDER.mcq = (ex, body, actions, o) => {
     let ok = 0; const wrong = [];
     body.querySelectorAll('.item').forEach(el => {
       const it = ex.items[+el.dataset.i]; const sel = el.querySelector('input:checked'); const v = sel ? +sel.value : -1;
-      el.querySelectorAll('.opt').forEach((lab, k) => { lab.classList.toggle('correct', k === it.a); lab.classList.toggle('wrong', k === v && v !== it.a); });
+      el.querySelectorAll('.opt').forEach(lab => { const k = +lab.dataset.k; lab.classList.toggle('correct', k === it.a); lab.classList.toggle('wrong', k === v && v !== it.a); });
       if (v === it.a) ok++;
       if (v !== it.a || !it.ex) wrong.push({ el, k: o.key + ':' + el.dataset.i, ok: v === it.a, q: it.q, options: it.options, correct: it.options[it.a], learner: v >= 0 ? it.options[v] : '(bỏ trống)' });
-      $('.fbk', el).innerHTML = `<div class="explain ${v === it.a ? 'ok' : ''}">${v === it.a ? 'Chính xác.' : 'Đáp án đúng: <b>' + fmt(it.options[it.a]) + '</b>'}${it.ex ? '<br>' + fmt(it.ex) : ''}</div>`;
+      $('.fbk', el).innerHTML = `<div class="explain ${v === it.a ? 'ok' : ''}">${v === it.a ? '<b>Correct.</b>' : (v < 0 ? 'Not answered. ' : '<b>Not quite.</b> ') + 'The correct answer is: <b>' + fmt(it.options[it.a]) + '</b>'}${it.ex ? '<br>' + fmt(it.ex) : ''}</div>`;
     });
     const pct = Math.round(ok / ex.items.length * 100); addResult(actions, pct, ` · ${ok}/${ex.items.length}`); record(o.key, pct);
     afterCheck(actions, ex, wrong);
@@ -306,17 +306,16 @@ RENDER.mcq = (ex, body, actions, o) => {
   actions.appendChild(check); resetBtn(actions, () => route());
 };
 
-/* Trắc nghiệm 2 tầng: tầng 1 chọn phương án, tầng 2 chọn lý do. 1 điểm khi đúng cả hai, 0,5 khi chỉ đúng tầng 1. */
-const hstr = t => [...String(t)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
-const permOf = (n, seed) => { const p = [...Array(n).keys()]; let x = seed || 1; for (let i = n - 1; i > 0; i--) { x = (x * 1103515245 + 12345) >>> 0; const j = x % (i + 1); [p[i], p[j]] = [p[j], p[i]]; } return p; };
+/* Trắc nghiệm 2 tầng: tầng 1 chọn phương án, tầng 2 chọn lý do. 1 điểm khi đúng cả hai, 0,5 khi chỉ đúng tầng 1.
+   Thứ tự phương án ở cả hai tầng được trộn ngẫu nhiên mỗi lần hiển thị. */
 RENDER.mcq2 = (ex, body, actions, o) => {
   const view = ex.items.map((it, i) => {
-    const p1 = permOf(it.options.length, hstr(it.q + it.options[0])), p2 = permOf(it.why.options.length, hstr(it.why.options.join('|')));
+    const p1 = shuffle([...it.options.keys()]), p2 = shuffle([...it.why.options.keys()]);
     const n1 = 'a' + Math.random().toString(36).slice(2), n2 = 'b' + Math.random().toString(36).slice(2);
     const L = 'ABCD';
-    body.appendChild(h(`<div class="item" data-i="${i}"><div><span class="qnum">${i + 1}.</span>${fmt(it.q || 'Chọn phương án đúng/tốt hơn.')}</div>
-      <div class="tier"><div class="tier-h">Tầng 1 · Chọn phương án</div><div class="opts">${p1.map((k, d) => `<label class="opt" data-k="${k}"><input type="radio" name="${n1}" value="${k}"><span><b>${L[d]}.</b> ${fmt(it.options[k])}</span></label>`).join('')}</div></div>
-      <div class="tier"><div class="tier-h">Tầng 2 · ${fmt(it.why.q || 'Vì sao?')}</div><div class="opts">${p2.map(k => `<label class="opt" data-k="${k}"><input type="radio" name="${n2}" value="${k}"><span>${fmt(it.why.options[k])}</span></label>`).join('')}</div></div>
+    body.appendChild(h(`<div class="item" data-i="${i}"><div><span class="qnum">${i + 1}.</span>${fmt(it.q || 'Choose the correct/better option.')}</div>
+      <div class="tier"><div class="tier-h">Step 1 · Choose an option</div><div class="opts">${p1.map((k, d) => `<label class="opt" data-k="${k}"><input type="radio" name="${n1}" value="${k}"><span><b>${L[d]}.</b> ${fmt(it.options[k])}</span></label>`).join('')}</div></div>
+      <div class="tier"><div class="tier-h">Step 2 · ${fmt(it.why.q || 'Why?')}</div><div class="opts">${p2.map(k => `<label class="opt" data-k="${k}"><input type="radio" name="${n2}" value="${k}"><span>${fmt(it.why.options[k])}</span></label>`).join('')}</div></div>
       <div class="fbk"></div></div>`));
     return { p1 };
   });
@@ -329,7 +328,7 @@ RENDER.mcq2 = (ex, body, actions, o) => {
       t1.querySelectorAll('.opt').forEach(l => { const k = +l.dataset.k; l.classList.toggle('correct', k === it.a); l.classList.toggle('wrong', k === v1 && v1 !== it.a); });
       t2.querySelectorAll('.opt').forEach(l => { const k = +l.dataset.k; l.classList.toggle('correct', k === it.why.a); l.classList.toggle('wrong', k === v2 && v2 !== it.why.a); });
       const ok1 = v1 === it.a, ok2 = v2 === it.why.a; const sc = ok1 && ok2 ? 1 : ok1 ? 0.5 : 0; sum += sc;
-      const msg = ok1 && ok2 ? 'Chính xác cả hai tầng.' : ok1 ? 'Đúng phương án nhưng chưa đúng lý do (0,5 điểm). Lý do đúng: <b>' + fmt(it.why.options[it.why.a]) + '</b>' : 'Phương án đúng: <b>' + fmt(it.options[it.a]) + '</b><br>Lý do: <b>' + fmt(it.why.options[it.why.a]) + '</b>';
+      const msg = ok1 && ok2 ? '<b>Correct on both steps.</b>' : ok1 ? '<b>Right option, wrong reason</b> (0.5 points). The correct reason is: <b>' + fmt(it.why.options[it.why.a]) + '</b>' : '<b>Not quite.</b> The correct option is: <b>' + fmt(it.options[it.a]) + '</b><br>Reason: <b>' + fmt(it.why.options[it.why.a]) + '</b>';
       $('.fbk', el).innerHTML = `<div class="explain ${sc === 1 ? 'ok' : ''}">${msg}${it.ex ? '<br>' + fmt(it.ex) : ''}</div>`;
       if (sc < 1) need.push({ el, k: o.key + ':' + i, ok: false, q: (it.q || '') + ' | Tier 2: ' + (it.why.q || 'Why?'), options: it.options.concat(['— reasons —'], it.why.options), correct: it.options[it.a] + ' / reason: ' + it.why.options[it.why.a], learner: (v1 >= 0 ? it.options[v1] : '(trống)') + ' / reason: ' + (v2 >= 0 ? it.why.options[v2] : '(trống)') });
     });
@@ -355,7 +354,7 @@ RENDER.gap = (ex, body, actions, o) => {
       let allOk = true;
       inputs.forEach((inp, k) => { total++; const good = (keys[k] || []).some(a => norm(a) === norm(inp.value)); inp.classList.toggle('ok', good); inp.classList.toggle('bad', !good); if (good) ok++; else allOk = false; });
       if (!allOk || !it.ex) wrong.push({ el, k: o.key + ':' + el.dataset.i, ok: allOk, q: it.q, correct: keys.map(k => k[0]).join(' | '), learner: inputs.map(i => i.value || '(trống)').join(' | ') });
-      $('.fbk', el).innerHTML = allOk ? (it.ex ? `<div class="explain ok">${fmt(it.ex)}</div>` : '') : `<div class="explain">Đáp án: <b>${esc(keys.map(k => k.join(' / ')).join(' | '))}</b>${it.ex ? '<br>' + fmt(it.ex) : ''}</div>`;
+      $('.fbk', el).innerHTML = allOk ? (it.ex ? `<div class="explain ok">${fmt(it.ex)}</div>` : '') : `<div class="explain">Answer: <b>${esc(keys.map(k => k.join(' / ')).join(' | '))}</b>${it.ex ? '<br>' + fmt(it.ex) : ''}</div>`;
     });
     const pct = Math.round(ok / total * 100); addResult(actions, pct, ` · ${ok}/${total}`); record(o.key, pct);
     afterCheck(actions, ex, wrong);
@@ -377,7 +376,7 @@ RENDER.match = (ex, body, actions, o) => {
       const p = ex.pairs[+el.dataset.i]; const s = $('select', el); const good = s.value === p.r;
       s.classList.toggle('ok', good); s.classList.toggle('bad', !good); if (good) ok++; else { wrong.push({ q: p.l, correct: p.r, learner: s.value || '(trống)' }); notes.push(`${+el.dataset.i + 1} → <b>${esc(p.r)}</b>`); }
     });
-    fb.innerHTML = notes.length ? `<div class="explain">Đáp án đúng: ${notes.join(' · ')}${ex.ex ? '<br>' + fmt(ex.ex) : ''}</div>` : (ex.ex ? `<div class="explain ok">${fmt(ex.ex)}</div>` : '');
+    fb.innerHTML = notes.length ? `<div class="explain">Correct answers: ${notes.join(' · ')}${ex.ex ? '<br>' + fmt(ex.ex) : ''}</div>` : (ex.ex ? `<div class="explain ok">${fmt(ex.ex)}</div>` : '');
     const pct = Math.round(ok / ex.pairs.length * 100); addResult(actions, pct, ` · ${ok}/${ex.pairs.length}`); record(o.key, pct);
     afterCheck(actions, ex, wrong);
   };
@@ -445,7 +444,7 @@ ITEMS: ${JSON.stringify(pending.filter(x => x.ans).map(x => ({ id: ex.items.inde
     items.forEach(x => {
       const id = ex.items.indexOf(x.it); const ta = $('textarea', x.el);
       let sc, fbHTML;
-      if (arr(x.it.a).some(a => norm(a) === norm(x.ans))) { sc = 1; fbHTML = `<div class="explain ok">Chính xác!${x.it.ex ? ' ' + fmt(x.it.ex) : ''}</div>`; }
+      if (arr(x.it.a).some(a => norm(a) === norm(x.ans))) { sc = 1; fbHTML = `<div class="explain ok"><b>Correct.</b>${x.it.ex ? ' ' + fmt(x.it.ex) : ''}</div>`; }
       else if (!x.ans) { sc = 0; fbHTML = `<div class="explain">Bạn chưa trả lời. Mẫu: <b>${esc(arr(x.it.a)[0])}</b></div>`; }
       else if (results[id]) { const r = results[id]; sc = Math.max(0, Math.min(1, +r.score || 0));
         const badge = (ok, t) => `<span class="pill ${ok ? 'ok' : 'no'}">${ok ? '✓' : '✗'} ${t}</span>`;

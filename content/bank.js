@@ -24,7 +24,7 @@ window.KL_BANK = function (text, charts = {}) {
   for (const raw of text.split('\n')) {
     const line = raw.trim();
     if (!line || line.startsWith('//')) { if (ex && ex.type === 'write' && !line.startsWith('//')) ex._lines.push(''); continue; }
-    if (line.startsWith('@')) { flush(); unit = U(line.slice(1).trim()); if (!unit) console.warn('KL_BANK: không thấy chủ đề', line); continue; }
+    if (line.startsWith('@')) { flush(); unit = U(line.slice(1).trim()); if (!unit) console.warn('KL_BANK: unit not found', line); continue; }
     const h = line.match(/^#(remember|understand|apply|analyze|evaluate|create)\s+([123])\s+(mcq|gap|rewrite|match|order|write)\s+(.*)$/);
     if (h) {
       flush();
@@ -34,7 +34,7 @@ window.KL_BANK = function (text, charts = {}) {
         ex.kind = unit.stage === 'grammar' ? 'grammar' : unit.stage;
         ex.minWords = +parts[1] || (ex.kind === 'task2' ? 250 : ex.kind === 'task1' ? 150 : 80);
         ex.focus = (parts[2] || '').split(';').map(s => s.trim()).filter(Boolean);
-        if (parts[3]) { ex.chart = charts[parts[3]]; if (!ex.chart) console.warn('KL_BANK: thiếu biểu đồ', parts[3]); }
+        if (parts[3]) { ex.chart = charts[parts[3]]; if (!ex.chart) console.warn('KL_BANK: chart missing', parts[3]); }
       } else {
         ex.instr = parts[1] || '';
         if (type === 'match') ex.pairs = []; else ex.items = [];
@@ -68,12 +68,12 @@ window.KL_BANK = function (text, charts = {}) {
   flush();
 };
 
-/* Gắn biểu đồ cho bài khách quan có nhắc tên biểu đồ nội bộ (ví dụ RICE, LINE_COFFEE) và thay tên đó bằng chữ "biểu đồ". */
+/* Gắn biểu đồ cho bài khách quan có nhắc tên biểu đồ nội bộ (ví dụ RICE, LINE_COFFEE) và thay tên đó bằng "the chart". */
 window.KL_SNAP = () => Object.fromEntries(window.UNITS.map(u => [u.id, u.exercises.length]));
 window.KL_ATTACH = function (charts, snap) {
   const names = Object.keys(charts).filter(k => charts[k]).sort((a, b) => b.length - a.length);
   const re = new RegExp('\\b(' + names.join('|') + ')\\b( chart)?', 'g');
-  const fix = s => typeof s === 'string' ? s.replace(re, 'biểu đồ').replace(/^biểu đồ/, 'Biểu đồ').replace(/biểu đồ:/g, 'Biểu đồ:') : s;
+  const fix = s => typeof s === 'string' ? s.replace(re, 'the chart').replace(/\b([Tt]he) the chart/g, '$1 chart').replace(/(^|[.!?]\s+|\n)the chart/g, (m, p) => p + 'The chart') : s;
   for (const u of window.UNITS) for (let i = snap[u.id] || 0; i < u.exercises.length; i++) {
     const e = u.exercises[i]; if (e.type === 'write') continue;
     const txt = JSON.stringify(e); const found = names.filter(n => new RegExp('\\b' + n + '\\b').test(txt));
